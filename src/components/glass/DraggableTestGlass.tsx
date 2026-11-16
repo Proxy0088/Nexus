@@ -1,4 +1,5 @@
 import React, { useRef, useState, useCallback } from "react";
+import { LiquidGlassCanvas } from "./LiquidGlassCanvas";
 import "./DraggableTestGlass.css";
 
 export interface DraggableTestGlassProps {
@@ -64,22 +65,42 @@ export const DraggableTestGlass: React.FC<DraggableTestGlassProps> = ({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
-      title="مربع شیشه‌ای بدون بلور — قابل جابه‌جایی روی صفحه"
+      title="مربع شیشه‌ای Liquid Glass با شکست نور بدون بلور — قابل جابه‌جایی روی صفحه"
       aria-label="Liquid Glass Test Square without Blur"
     >
-      <div className="nexus-draggable-glass-header">
-        <span className="nexus-draggable-glass-badge">Zero Blur Glass</span>
-        <span className="nexus-draggable-glass-drag-hint">↔ Drag anywhere</span>
-      </div>
+      {/* WebGL Liquid Glass Optical Refraction & Specular Bevel Shader */}
+      <LiquidGlassCanvas
+        cornerRadius={28}
+        lightIntensity={0.9}
+        dispersion={0.7}
+        refraction={0.8}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          borderRadius: "inherit",
+          zIndex: 1,
+        }}
+      />
 
-      <div className="nexus-draggable-glass-body">
-        <p className="nexus-draggable-glass-lorem">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-          cillum dolore eu fugiat nulla pariatur.
-        </p>
+      {/* Content Layer (Badge & Lorem Ipsum Text) */}
+      <div className="nexus-draggable-glass-content-wrap">
+        <div className="nexus-draggable-glass-header">
+          <span className="nexus-draggable-glass-badge">Liquid Glass</span>
+          <span className="nexus-draggable-glass-drag-hint">↔ Drag anywhere</span>
+        </div>
+
+        <div className="nexus-draggable-glass-body">
+          <p className="nexus-draggable-glass-lorem">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur.
+          </p>
+        </div>
       </div>
     </div>
   );

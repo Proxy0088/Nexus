@@ -1,4 +1,4 @@
-/* Draggable Glass Square with Zero Blur and Lorem Ipsum Text */
+/* Draggable Glass Square with Liquid Glass Refraction Bevel, Zero Blur, and Lorem Ipsum Text */
 
 .nexus-draggable-glass-test {
   position: absolute;
@@ -6,12 +6,12 @@
   min-height: 220px;
   left: calc(50% - 140px);
   top: calc(50% - 110px);
-  z-index: 100; /* Floating directly above all layers for live testing */
+  z-index: 100; /* Floating directly above all layers for live optical testing */
   cursor: grab;
   user-select: none;
   touch-action: none;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
 
   /* Crystal-clear view: STRICTLY ZERO BLUR as requested */
   backdrop-filter: none !important;
@@ -39,13 +39,22 @@
   border-color: rgba(255, 255, 255, 0.38);
 }
 
+.nexus-draggable-glass-content-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 .nexus-draggable-glass-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 12px;
-  pointer-events: none;
 }
 
 .nexus-draggable-glass-badge {
@@ -64,19 +73,18 @@
 .nexus-draggable-glass-drag-hint {
   font-family: var(--nexus-font-family);
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.40);
+  color: rgba(255, 255, 255, 0.45);
 }
 
 .nexus-draggable-glass-body {
   flex: 1;
-  pointer-events: none;
 }
 
 .nexus-draggable-glass-lorem {
   font-family: var(--nexus-font-family);
   font-size: 12px;
   line-height: 18px;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.82);
   margin: 0;
   text-align: left;
   letter-spacing: 0.01em;
