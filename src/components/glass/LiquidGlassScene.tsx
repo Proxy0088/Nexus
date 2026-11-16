@@ -43,7 +43,6 @@ export const LiquidGlassScene: React.FC<LiquidGlassSceneProps> = ({
     // Give DOM a frame to compute layout and ensure background images are ready
     const timer = setTimeout(() => {
       const glassNodes = rootEl.querySelectorAll<HTMLElement>('[data-glass="true"]');
-      if (glassNodes.length === 0) return;
 
       LiquidGlass.init({
         root: rootEl,

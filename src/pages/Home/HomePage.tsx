@@ -3,7 +3,6 @@ import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav, NavTabId } from "@/components/navigation/BottomNav";
 import { LiquidGlassPanel } from "@/components/glass/LiquidGlassPanel";
 import { LiquidGlassScene } from "@/components/glass/LiquidGlassScene";
-import { DraggableTestGlass } from "@/components/glass/DraggableTestGlass";
 import "./HomePage.css";
 
 export const HomePage: React.FC = () => {
@@ -72,9 +71,6 @@ export const HomePage: React.FC = () => {
         {/* Bottom Navigation Bar */}
         <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
       </section>
-
-      {/* Draggable square with liquid glass effect and zero blur */}
-      <DraggableTestGlass />
     </LiquidGlassScene>
   );
 };
