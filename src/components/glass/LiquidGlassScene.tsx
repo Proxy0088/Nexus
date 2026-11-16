@@ -9,6 +9,17 @@ export interface LiquidGlassSceneProps {
   style?: React.CSSProperties;
 }
 
+const DEFAULT_GLASS_CONFIG: Partial<GlassConfig> = {
+  blurAmount: 0.25,
+  refraction: 0.55,
+  chromAberration: 0.05,
+  edgeHighlight: 0.14,
+  specular: 0.12,
+  fresnel: 0.95,
+  zRadius: 24,
+  shadowOpacity: 0.28,
+};
+
 /**
  * LiquidGlassScene integrates @ybouane/liquidglass based on Apple-LiquidGlass-Skill.
  * It orchestrates WebGL optical refraction, chromatic aberration, rim lighting,
@@ -16,16 +27,7 @@ export interface LiquidGlassSceneProps {
  */
 export const LiquidGlassScene: React.FC<LiquidGlassSceneProps> = ({
   children,
-  defaults = {
-    blurAmount: 0.25,
-    refraction: 0.55,
-    chromAberration: 0.05,
-    edgeHighlight: 0.14,
-    specular: 0.12,
-    fresnel: 0.95,
-    zRadius: 24,
-    shadowOpacity: 0.28,
-  },
+  defaults = DEFAULT_GLASS_CONFIG,
   className = "",
   style,
 }) => {
