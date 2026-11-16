@@ -1,5 +1,4 @@
 import React, { useRef, useState, useCallback } from "react";
-import { LiquidGlassCanvas } from "./LiquidGlassCanvas";
 import "./DraggableTestGlass.css";
 
 export interface DraggableTestGlassProps {
@@ -17,6 +16,7 @@ export const DraggableTestGlass: React.FC<DraggableTestGlassProps> = ({
     y: initialY ?? 0,
   }));
   const [isDragging, setIsDragging] = useState(false);
+  const [hasMoved, setHasMoved] = useState(false);
   const dragRef = useRef({ startX: 0, startY: 0, originX: 0, originY: 0 });
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -31,6 +31,7 @@ export const DraggableTestGlass: React.FC<DraggableTestGlassProps> = ({
       originY: pos.y,
     };
     setIsDragging(true);
+    setHasMoved(true);
   }, [pos]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -53,10 +54,27 @@ export const DraggableTestGlass: React.FC<DraggableTestGlassProps> = ({
     setIsDragging(false);
   }, []);
 
+  const glassConfig = {
+    floating: true,
+    cornerRadius: 32,
+    zRadius: 36,
+    refraction: 0.85,
+    blurAmount: 0.0,
+    chromAberration: 0.08,
+    edgeHighlight: 0.24,
+    specular: 0.25,
+    fresnel: 1.1,
+    shadowOpacity: 0.38,
+    shadowSpread: 18,
+    shadowOffsetY: 8,
+  };
+
   return (
     <div
       ref={cardRef}
-      className={`nexus-draggable-glass-test ${isDragging ? "is-dragging" : ""}`}
+      data-glass="true"
+      data-config={JSON.stringify(glassConfig)}
+      className="nexus-draggable-glass-test"
       style={{
         transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
         cursor: isDragging ? "grabbing" : "grab",
@@ -65,43 +83,14 @@ export const DraggableTestGlass: React.FC<DraggableTestGlassProps> = ({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
-      title="مربع شیشه‌ای Liquid Glass با شکست نور بدون بلور — قابل جابه‌جایی روی صفحه"
-      aria-label="Liquid Glass Test Square without Blur"
+      title="مربع شیشه‌ای تست Liquid Glass — قابل جابه‌جایی"
+      aria-label="Liquid Glass Test Square"
     >
-      {/* WebGL Liquid Glass Optical Refraction & Specular Bevel Shader */}
-      <LiquidGlassCanvas
-        cornerRadius={28}
-        lightIntensity={0.9}
-        dispersion={0.7}
-        refraction={0.8}
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
-          borderRadius: "inherit",
-          zIndex: 1,
-        }}
-      />
-
-      {/* Content Layer (Badge & Lorem Ipsum Text) */}
-      <div className="nexus-draggable-glass-content-wrap">
-        <div className="nexus-draggable-glass-header">
-          <span className="nexus-draggable-glass-badge">Liquid Glass</span>
-          <span className="nexus-draggable-glass-drag-hint">↔ Drag anywhere</span>
-        </div>
-
-        <div className="nexus-draggable-glass-body">
-          <p className="nexus-draggable-glass-lorem">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur.
-          </p>
-        </div>
-      </div>
+      {!hasMoved && (
+        <span className="nexus-draggable-glass-hint">
+          Drag to test
+        </span>
+      )}
     </div>
   );
 };

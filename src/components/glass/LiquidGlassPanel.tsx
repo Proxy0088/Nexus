@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useMemo } from "react";
+import React, { useRef, useCallback } from "react";
 import type { GlassConfig } from "@ybouane/liquidglass";
 import { LiquidGlassCanvas } from "./LiquidGlassCanvas";
 import "./LiquidGlass.css";
@@ -25,98 +25,10 @@ const CORNER_RADII: Record<GlassVariant, number> = {
   card: 41,
 };
 
-const VARIANT_CONFIGS: Record<GlassVariant, Partial<GlassConfig>> = {
-  default: {
-    cornerRadius: 32,
-    zRadius: 36,
-    refraction: 0.85,
-    blurAmount: 0.25,
-    chromAberration: 0.08,
-    edgeHighlight: 0.24,
-    specular: 0.25,
-    fresnel: 1.1,
-    shadowOpacity: 0.38,
-    shadowSpread: 18,
-    shadowOffsetY: 8,
-  },
-  panel: {
-    cornerRadius: 41,
-    zRadius: 36,
-    refraction: 0.85,
-    blurAmount: 0.25,
-    chromAberration: 0.08,
-    edgeHighlight: 0.24,
-    specular: 0.25,
-    fresnel: 1.1,
-    shadowOpacity: 0.38,
-    shadowSpread: 20,
-    shadowOffsetY: 8,
-  },
-  navbar: {
-    cornerRadius: 28,
-    zRadius: 32,
-    refraction: 0.85,
-    blurAmount: 0.25,
-    chromAberration: 0.08,
-    edgeHighlight: 0.24,
-    specular: 0.25,
-    fresnel: 1.1,
-    shadowOpacity: 0.38,
-    shadowSpread: 16,
-    shadowOffsetY: 6,
-  },
-  pill: {
-    cornerRadius: 24,
-    zRadius: 36,
-    refraction: 0.85,
-    blurAmount: 0.25,
-    chromAberration: 0.08,
-    edgeHighlight: 0.24,
-    specular: 0.25,
-    fresnel: 1.1,
-    shadowOpacity: 0.38,
-    shadowSpread: 18,
-    shadowOffsetY: 8,
-  },
-  search: {
-    cornerRadius: 60,
-    zRadius: 32,
-    refraction: 0.85,
-    blurAmount: 0.25,
-    chromAberration: 0.08,
-    edgeHighlight: 0.24,
-    specular: 0.25,
-    fresnel: 1.1,
-    shadowOpacity: 0.35,
-  },
-  profile: {
-    cornerRadius: 58,
-    zRadius: 36,
-    refraction: 0.85,
-    blurAmount: 0.25,
-    chromAberration: 0.08,
-    edgeHighlight: 0.24,
-    specular: 0.25,
-    fresnel: 1.1,
-    button: true,
-  },
-  card: {
-    cornerRadius: 41,
-    zRadius: 36,
-    refraction: 0.85,
-    blurAmount: 0.25,
-    chromAberration: 0.08,
-    edgeHighlight: 0.24,
-    specular: 0.25,
-    fresnel: 1.1,
-  },
-};
-
 export const LiquidGlassPanel: React.FC<LiquidGlassPanelProps> = ({
   variant = "default",
   enableMouseSheen = false,
   enableCanvas = false,
-  config,
   className = "",
   style,
   children,
@@ -124,13 +36,6 @@ export const LiquidGlassPanel: React.FC<LiquidGlassPanelProps> = ({
   ...restProps
 }) => {
   const panelRef = useRef<HTMLDivElement>(null);
-
-  const mergedConfig = useMemo(() => {
-    return {
-      ...VARIANT_CONFIGS[variant],
-      ...config,
-    };
-  }, [variant, config]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -151,8 +56,6 @@ export const LiquidGlassPanel: React.FC<LiquidGlassPanelProps> = ({
   return (
     <div
       ref={panelRef}
-      data-glass="true"
-      data-config={JSON.stringify(mergedConfig)}
       className={`liquid-glass ${variantClass} ${className}`.trim()}
       style={style}
       onMouseMove={handleMouseMove}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav, NavTabId } from "@/components/navigation/BottomNav";
 import { LiquidGlassPanel } from "@/components/glass/LiquidGlassPanel";
+import { LiquidGlassScene } from "@/components/glass/LiquidGlassScene";
 import { DraggableTestGlass } from "@/components/glass/DraggableTestGlass";
 import "./HomePage.css";
 
@@ -23,7 +24,7 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <main className="nexus-app-root">
+    <LiquidGlassScene className="nexus-app-root">
       {/* Background layer (Figma node 2:6 / 12) */}
       <div className="nexus-bg-layer" aria-hidden="true" />
 
@@ -72,8 +73,8 @@ export const HomePage: React.FC = () => {
         <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
       </section>
 
-      {/* Draggable square with zero blur and Lorem Ipsum text as requested */}
+      {/* Draggable square with liquid glass effect and zero blur */}
       <DraggableTestGlass />
-    </main>
+    </LiquidGlassScene>
   );
 };

@@ -1,91 +1,52 @@
-/* Draggable Glass Square with Liquid Glass Refraction Bevel, Zero Blur, and Lorem Ipsum Text */
+/* Draggable Empty Liquid Glass Test Square */
 
 .nexus-draggable-glass-test {
   position: absolute;
-  width: 280px;
-  min-height: 220px;
-  left: calc(50% - 140px);
+  width: 220px;
+  height: 220px;
+  left: calc(50% - 110px);
   top: calc(50% - 110px);
-  z-index: 100; /* Floating directly above all layers for live optical testing */
+  z-index: 999;
   cursor: grab;
   user-select: none;
   touch-action: none;
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.05);
 
-  /* Crystal-clear view: STRICTLY ZERO BLUR as requested */
+  /* Zero blur as requested */
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.65);
   box-shadow:
-    inset 0 1px 2px 0 rgba(255, 255, 255, 0.40),
-    inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
-    0 24px 52px -6px rgba(0, 0, 0, 0.70);
-
+    inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1.5px 2px 0 rgba(255, 255, 255, 0.1),
+    0 24px 48px -8px rgba(0, 0, 0, 0.65);
   display: flex;
-  flex-direction: column;
-  padding: 18px 20px;
-  box-sizing: border-box;
-  overflow: hidden;
+  align-items: center;
+  justify-content: center;
   transition: box-shadow 150ms ease, border-color 150ms ease;
 }
 
-.nexus-draggable-glass-test.is-dragging {
+.nexus-draggable-glass-test:active {
   cursor: grabbing;
   box-shadow:
-    inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.50),
-    0 32px 64px -4px rgba(0, 0, 0, 0.85);
-  border-color: rgba(255, 255, 255, 0.38);
+    inset 0 2px 4px 0 rgba(255, 255, 255, 0.7),
+    0 32px 64px -6px rgba(0, 0, 0, 0.75);
 }
 
-.nexus-draggable-glass-content-wrap {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.nexus-draggable-glass-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 12px;
-}
-
-.nexus-draggable-glass-badge {
-  font-family: var(--nexus-font-family);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--nexus-color-accent);
-  background: var(--nexus-color-accent-subtle);
-  padding: 3px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(31, 210, 158, 0.25);
-}
-
-.nexus-draggable-glass-drag-hint {
+/* Subtle corner label / hint that fades out on first drag */
+.nexus-draggable-glass-hint {
   font-family: var(--nexus-font-family);
   font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  transition: opacity 250ms ease;
 }
 
-.nexus-draggable-glass-body {
-  flex: 1;
-}
-
-.nexus-draggable-glass-lorem {
-  font-family: var(--nexus-font-family);
-  font-size: 12px;
-  line-height: 18px;
-  color: rgba(255, 255, 255, 0.82);
-  margin: 0;
-  text-align: left;
-  letter-spacing: 0.01em;
+.nexus-draggable-glass-test:hover .nexus-draggable-glass-hint {
+  color: rgba(255, 255, 255, 0.75);
 }
