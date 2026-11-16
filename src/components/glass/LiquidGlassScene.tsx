@@ -56,6 +56,7 @@ export const LiquidGlassScene: React.FC<LiquidGlassSceneProps> = ({
           } else {
             liquidInstance = instance;
             (window as any).__nexusLiquidGlass = instance;
+            window.dispatchEvent(new CustomEvent("nexus:liquidglass-ready", { detail: instance }));
           }
         })
         .catch((err) => {
