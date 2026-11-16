@@ -1,0 +1,111 @@
+/* Liquid Glass Design System Styles — Clean, Optical Glass without Corner Halos */
+
+.liquid-glass {
+  position: relative;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(28px) saturate(145%);
+  -webkit-backdrop-filter: blur(28px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow:
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.40),
+    inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
+    0 24px 48px -8px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  transition: all var(--nexus-transition-glass);
+}
+
+/* Remove corner halo specular sheen layer completely as requested */
+.liquid-glass::before {
+  display: none !important;
+}
+
+/* Dynamic mouse reflection highlight */
+.liquid-glass-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--nexus-transition-normal);
+  background: radial-gradient(
+    circle 240px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.12),
+    transparent 70%
+  );
+  z-index: 2;
+}
+
+.liquid-glass:hover .liquid-glass-glow {
+  opacity: 1;
+}
+
+/* Variant: Content Panels (Frame 2 & Frame 5) */
+.liquid-glass-panel {
+  border-radius: var(--nexus-radius-panel); /* 41px */
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow:
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.40),
+    inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
+    0 24px 48px -8px rgba(0, 0, 0, 0.65);
+}
+
+/* Variant: Bottom Navbar Container */
+.liquid-glass-navbar {
+  border-radius: var(--nexus-radius-navbar); /* 28px */
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow:
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.40),
+    inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
+    0 20px 44px -8px rgba(0, 0, 0, 0.65);
+}
+
+/* Variant: Nav Active Pill */
+.liquid-glass-pill {
+  border-radius: var(--nexus-radius-pill); /* 52px */
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(28px) saturate(145%);
+  -webkit-backdrop-filter: blur(28px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.50),
+    0 8px 24px -2px rgba(0, 0, 0, 0.50);
+}
+
+/* Variant: Top Search Bar */
+.liquid-glass-search {
+  border-radius: var(--nexus-radius-search); /* 60px */
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow:
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.40),
+    inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
+    0 16px 32px -6px rgba(0, 0, 0, 0.55);
+}
+
+.liquid-glass-search:focus-within {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Variant: Profile / Action Button */
+.liquid-glass-profile {
+  border-radius: var(--nexus-radius-profile); /* 58px */
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow:
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.40),
+    0 12px 24px -4px rgba(0, 0, 0, 0.45);
+}
+
+/* Variant: Cards */
+.liquid-glass-card {
+  border-radius: var(--nexus-radius-panel);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow:
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.40),
+    inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
+    0 24px 48px -8px rgba(0, 0, 0, 0.65);
+}

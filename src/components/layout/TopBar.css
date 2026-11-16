@@ -1,0 +1,164 @@
+/* Top Bar Component Styles */
+
+.nexus-topbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1118px;
+  height: 74px;
+  position: relative;
+  z-index: 20;
+}
+
+/* Search Bar (Figma Rectangle 1: 463x60 at x:21, y:7) */
+.nexus-search-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 463px;
+  height: 60px;
+  padding: 0 24px;
+  position: absolute;
+  left: 21px;
+  top: 7px;
+  border-radius: var(--nexus-radius-search);
+  box-sizing: border-box;
+  transition: all var(--nexus-transition-fast);
+}
+
+.nexus-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--nexus-font-family);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--nexus-color-text-primary);
+  letter-spacing: 0;
+  padding-right: 12px;
+}
+
+.nexus-search-input::placeholder {
+  color: var(--nexus-color-text-muted);
+  font-family: var(--nexus-font-family);
+}
+
+.nexus-search-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--nexus-color-text-secondary);
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* App Title (Figma Nexus: 118x56 at x:696, y:9) */
+.nexus-title-wrapper {
+  position: absolute;
+  left: 696px;
+  top: 9px;
+  width: 118px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.nexus-title {
+  font-family: var(--nexus-font-family);
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--nexus-color-text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* Right Section: Actions (Reminder at x:972, Profile at x:1025) */
+.nexus-topbar-actions {
+  position: absolute;
+  left: 972px;
+  top: 7px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 27px;
+}
+
+/* Notification Reminder Button (Figma Reminder: 26x26 at x:972, y:24) */
+.nexus-reminder-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: none;
+  color: var(--nexus-color-text-secondary);
+  cursor: pointer;
+  position: relative;
+  transition: transform var(--nexus-duration-hover) var(--nexus-ease-out),
+              color var(--nexus-duration-hover) var(--nexus-ease-out);
+  padding: 0;
+  outline: none;
+}
+
+.nexus-reminder-btn:hover {
+  color: var(--nexus-color-text-primary);
+  transform: translateY(-1px);
+}
+
+.nexus-reminder-btn:active {
+  transform: scale(0.98);
+}
+
+/* Profile Glass Circle (Figma Profile: 60x60 at x:1025, y:7) */
+.nexus-profile-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--nexus-radius-profile);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: transform var(--nexus-duration-hover) var(--nexus-ease-out),
+              background var(--nexus-duration-hover) var(--nexus-ease-out);
+}
+
+.nexus-profile-btn:hover {
+  transform: translateY(-1px);
+}
+
+.nexus-profile-btn:active {
+  transform: scale(0.98);
+}
+
+/* Responsive adjustment for narrower screens */
+@media (max-width: 1180px) {
+  .nexus-topbar {
+    justify-content: space-between;
+  }
+  .nexus-search-container {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 320px;
+  }
+  .nexus-title-wrapper {
+    position: relative;
+    left: auto;
+    top: auto;
+  }
+  .nexus-topbar-actions {
+    position: relative;
+    left: auto;
+    top: auto;
+  }
+}

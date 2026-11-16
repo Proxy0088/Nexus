@@ -1,0 +1,211 @@
+/* Home Page & App Layout Styles — Clean Glass Aesthetics without Corner Glare */
+
+.nexus-app-root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-width: 900px;
+  min-height: 600px;
+  background-color: var(--nexus-color-bg-root);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Background Atmospheric Image (Figma node 2:6 / 12) */
+.nexus-bg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/assets/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Main Frame (Figma node 2:12 - 1340x836 at x:50, y:32) */
+.nexus-main-frame {
+  position: relative;
+  z-index: 10;
+  width: 1340px;
+  max-width: calc(100vw - 40px);
+  height: 836px;
+  max-height: calc(100vh - 40px);
+  border-radius: var(--nexus-radius-main);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(28px) saturate(145%);
+  -webkit-backdrop-filter: blur(28px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow:
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
+    0 32px 72px 0 rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 36px 30px 22px 30px;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all var(--nexus-transition-glass);
+}
+
+/* Content Area: Fluid Morphing Panels between Home and Other Tabs */
+.nexus-content-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
+  max-width: 1120px;
+  height: 555px;
+  margin-top: 31px;
+  margin-bottom: 42px;
+  position: relative;
+  z-index: 15;
+  box-sizing: border-box;
+  transition: gap 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nexus-content-area.is-other {
+  gap: 0;
+}
+
+/* Tab change transition animation */
+.nexus-tab-content-enter {
+  animation: nexusTabFadeIn 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes nexusTabFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Left Content Panel: Fluid Slide In / Out Animation */
+.nexus-left-panel {
+  height: 555px;
+  flex-shrink: 0;
+  border-radius: var(--nexus-radius-panel);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  box-sizing: border-box;
+  transition: width 360ms cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+              margin 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: width, opacity, transform;
+}
+
+.nexus-left-panel.panel-visible {
+  width: 375px;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+.nexus-left-panel.panel-hidden {
+  width: 0 !important;
+  min-width: 0 !important;
+  opacity: 0;
+  transform: translateX(-30px) scale(0.97);
+  padding: 0 !important;
+  border-width: 0 !important;
+  margin: 0 !important;
+  pointer-events: none;
+}
+
+/* Right Content Panel: Seamlessly Occupies Remaining Width (715px -> 1120px) */
+.nexus-right-panel {
+  height: 555px;
+  flex: 1;
+  border-radius: var(--nexus-radius-panel);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+  box-sizing: border-box;
+  transition: width 360ms cubic-bezier(0.22, 1, 0.36, 1),
+              max-width 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: width, max-width;
+}
+
+.nexus-right-panel.panel-home {
+  width: 715px;
+  max-width: 715px;
+}
+
+.nexus-right-panel.panel-expanded {
+  width: 1120px;
+  max-width: 1120px;
+}
+
+/* Placeholder for inactive prepared modules */
+.nexus-module-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--nexus-color-text-secondary);
+  gap: 12px;
+  padding: 32px;
+}
+
+.nexus-module-placeholder-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--nexus-color-text-primary);
+  font-family: var(--nexus-font-family);
+}
+
+.nexus-module-placeholder-desc {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--nexus-color-text-muted);
+  max-width: 400px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1240px) {
+  .nexus-content-area {
+    gap: 20px;
+  }
+  .nexus-left-panel.panel-visible {
+    width: 320px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .nexus-main-frame {
+    padding: 20px 16px;
+    height: auto;
+  }
+  .nexus-content-area {
+    height: auto;
+    margin-top: 20px;
+    margin-bottom: 24px;
+    flex-direction: row;
+  }
+  .nexus-left-panel.panel-visible {
+    width: 280px;
+    height: 480px;
+  }
+  .nexus-right-panel {
+    height: 480px;
+  }
+}

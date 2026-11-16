@@ -1,0 +1,50 @@
+.nexus-glass-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  outline: none;
+  user-select: none;
+  transition: transform var(--nexus-transition-fast);
+}
+
+.nexus-glass-btn:hover {
+  transform: translateY(-1px);
+}
+
+.nexus-glass-btn:active {
+  transform: translateY(1px);
+}
+
+.nexus-glass-btn-surface {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.nexus-glass-btn-sm {
+  height: 32px;
+}
+
+.nexus-glass-btn-md {
+  height: 44px;
+}
+
+.nexus-glass-btn-lg {
+  height: 56px;
+}
+
+.nexus-glass-btn-circle {
+  border-radius: 50%;
+  aspect-ratio: 1;
+}
+
+.nexus-glass-btn-content {
+  font-family: var(--nexus-font-family);
+  font-size: 13px;
+  color: var(--nexus-color-text-secondary);
+  padding: 0 16px;
+}

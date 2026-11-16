@@ -1,0 +1,28 @@
+.nexus-glass-card {
+  border-radius: var(--nexus-radius-panel);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nexus-glass-card-header {
+  margin-bottom: 16px;
+}
+
+.nexus-glass-card-title {
+  font-family: var(--nexus-font-family);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--nexus-color-text-primary);
+  margin-bottom: 4px;
+}
+
+.nexus-glass-card-subtitle {
+  font-family: var(--nexus-font-family);
+  font-size: 12px;
+  color: var(--nexus-color-text-muted);
+}
+
+.nexus-glass-card-body {
+  flex: 1;
+}

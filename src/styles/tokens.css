@@ -1,0 +1,91 @@
+:root {
+  /* ==========================================================================
+     Unslop Design Tokens — Precision, Restraint, and Craft
+     ========================================================================== */
+
+  /* Neutral Ramp (Graphite / Ink Dark Theme & Liquid Glass) */
+  --nexus-color-bg-root: #000000;
+  --nexus-color-surface-deep: #090a0d;
+  --nexus-color-surface-main: #0e1015;
+  --nexus-color-glass-base: #ffffff;
+  --nexus-color-glass-tint: rgba(255, 255, 255, 0.06);
+  --nexus-color-glass-tint-hover: rgba(255, 255, 255, 0.09);
+  --nexus-color-glass-active: rgba(255, 255, 255, 0.14);
+
+  /* Text Roles (Primary, Secondary, Muted — Strict 3-Role Hierarchy) */
+  --nexus-color-text-primary: #ededed;
+  --nexus-color-text-secondary: #a1a1a6;
+  --nexus-color-text-muted: #73737a;
+
+  /* Accent (Quiet, Deliberate Accent from Background Atmosphere) */
+  --nexus-color-accent: #1fd29e;
+  --nexus-color-accent-subtle: rgba(31, 210, 158, 0.15);
+
+  /* Hairlines and Borders (Clean, uniform optical glass borders without corner halos) */
+  --nexus-border-hairline: rgba(255, 255, 255, 0.20);
+  --nexus-border-specular-top: rgba(255, 255, 255, 0.22);
+  --nexus-border-specular-bright: rgba(255, 255, 255, 0.35);
+
+  /* Gradients (Restrained, subtle shifts inside neutral ramp) */
+  --nexus-gradient-main-frame: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 40%,
+    rgba(0, 0, 0, 0.20) 100%
+  );
+  --nexus-gradient-specular-sheen: transparent;
+
+  /* Shadows & Optical Refractions */
+  --nexus-shadow-inner-highlight: inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.60), inset 0 -1.5px 2px 0 rgba(255, 255, 255, 0.10);
+  --nexus-shadow-glass-depth: 0 24px 48px -8px rgba(0, 0, 0, 0.65);
+  --nexus-shadow-pill-active: inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.70), 0 8px 24px rgba(0, 0, 0, 0.50);
+
+  /* Radii Scale (Strict nested radius hierarchy) */
+  --nexus-radius-sm: 8px;
+  --nexus-radius-md: 12px;
+  --nexus-radius-main: 20px;
+  --nexus-radius-navbar: 28px;
+  --nexus-radius-panel: 41px;
+  --nexus-radius-pill: 52px;
+  --nexus-radius-profile: 58px;
+  --nexus-radius-search: 60px;
+
+  /* Typography Scale */
+  --nexus-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Geist", "Comic Sans MS", sans-serif;
+  --nexus-font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  --nexus-font-title: 500 40px/1.15 var(--nexus-font-family);
+  --nexus-font-body: 400 14px/20px var(--nexus-font-family);
+  --nexus-font-nav: 500 11px/16px var(--nexus-font-family);
+  --nexus-font-meta: 400 12px/16px var(--nexus-font-family);
+
+  /* Blurs */
+  --nexus-blur-glass: 24px;
+  --nexus-blur-heavy: 40px;
+
+  /* Motion & Easings (Unslop Curve: cubic-bezier(0.22, 1, 0.36, 1)) */
+  --nexus-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --nexus-duration-hover: 140ms;
+  --nexus-duration-normal: 200ms;
+  --nexus-duration-entrance: 350ms;
+  --nexus-transition-fast: 140ms var(--nexus-ease-out);
+  --nexus-transition-normal: 200ms var(--nexus-ease-out);
+  --nexus-transition-glass: 350ms var(--nexus-ease-out);
+}
+
+/* Light Theme Foundation */
+[data-theme="light"] {
+  --nexus-color-bg-root: #f4f5f7;
+  --nexus-color-surface-deep: #eaedf1;
+  --nexus-color-surface-main: #ffffff;
+  --nexus-color-glass-base: #ffffff;
+  --nexus-color-glass-tint: rgba(255, 255, 255, 0.65);
+  --nexus-color-glass-tint-hover: rgba(255, 255, 255, 0.85);
+  --nexus-color-glass-active: #ffffff;
+  --nexus-color-text-primary: #171717;
+  --nexus-color-text-secondary: #525252;
+  --nexus-color-text-muted: #737373;
+  --nexus-border-hairline: rgba(0, 0, 0, 0.08);
+  --nexus-border-specular-top: rgba(255, 255, 255, 0.9);
+  --nexus-shadow-glass-depth: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
