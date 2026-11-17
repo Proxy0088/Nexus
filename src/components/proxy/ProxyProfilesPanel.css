@@ -44,13 +44,23 @@
   font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 14px;
   cursor: pointer;
-  transition: all 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* Rule 1 & 15: Ease-out with 160ms entrance, 128ms exit */
+  transition: transform 128ms cubic-bezier(0.16, 1, 0.3, 1),
+              background 160ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
 .proxy-add-button:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.35);
   transform: translateY(-1px);
+}
+
+/* Rule 4: Scale to 0.97 on press */
+.proxy-add-button:active {
+  transform: scale(0.97);
+  transition-duration: 70ms;
 }
 
 .proxy-profiles-list {
@@ -60,6 +70,18 @@
 }
 
 /* Active Profile Item (matches exact Figma reference geometry) */
+/* Rule 1 & 3: Stagger list rows by 30ms with smooth ease-out */
+@keyframes nexusRowEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .proxy-profile-item {
   display: flex;
   align-items: center;
@@ -68,7 +90,9 @@
   padding: 8px 12px 8px 0;
   box-sizing: border-box;
   border-radius: 28px;
-  transition: background-color 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: nexusRowEnter 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--row-index, 0) * 30ms);
 }
 
 .proxy-profile-item.is-active {
@@ -95,6 +119,11 @@
   justify-content: center;
   flex-shrink: 0;
   box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.35);
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.proxy-profile-item:hover .proxy-profile-icon-box {
+  transform: scale(1.02);
 }
 
 .proxy-profile-icon-svg {
@@ -125,10 +154,25 @@
   margin: 0;
 }
 
+/* Rule 20: Reuse the same layout (stable width so no layout shifts occur) */
 .proxy-profile-right {
   display: flex;
   align-items: center;
   gap: 16px;
+  min-width: 150px;
+  justify-content: flex-end;
+}
+
+/* Rule 6: Stagger as details settle (+25ms after row) */
+@keyframes nexusDetailSettle {
+  from {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .proxy-profile-latency {
@@ -138,6 +182,28 @@
   line-height: 30px;
   color: #1ED53B;
   letter-spacing: -0.01em;
+  animation: nexusDetailSettle 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--row-index, 0) * 30ms + 25ms);
+}
+
+/* Rule 8: Pulse to confirm success (when active checkmark appears)
+   Rule 18: Crossfade icons + subtle blur */
+@keyframes nexusConfirmPulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.6;
+    filter: blur(1.5px);
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
 }
 
 .proxy-profile-check {
@@ -147,6 +213,7 @@
   width: 36px;
   height: 36px;
   color: #1ED53B;
+  animation: nexusConfirmPulse 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .proxy-profile-actions {
@@ -164,9 +231,18 @@
   font-family: "Comic Sans MS", sans-serif;
   font-size: 13px;
   cursor: pointer;
-  transition: all 140ms ease;
+  /* Rule 15: Exits 20% shorter (112ms exit vs 140ms enter) */
+  transition: transform 112ms cubic-bezier(0.16, 1, 0.3, 1),
+              background 140ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
 .proxy-profile-select-btn:hover {
   background: rgba(255, 255, 255, 0.18);
+}
+
+/* Rule 4: Scale to 0.97 on press */
+.proxy-profile-select-btn:active {
+  transform: scale(0.97);
+  transition-duration: 70ms;
 }

@@ -80,13 +80,14 @@ export const ConnectionDiagnostics: React.FC = () => {
       </div>
 
       <div className="proxy-diagnostics-grid">
-        {items.map((item) => {
+        {items.map((item, index) => {
           const IconComp = item.icon;
           return (
             <ProxyGlassCard
               key={item.id}
               cornerRadius={28}
               className="proxy-diagnostic-card"
+              style={{ "--card-index": index } as React.CSSProperties}
             >
               <div className="proxy-diagnostic-inner">
                 <div className="proxy-diagnostic-top">

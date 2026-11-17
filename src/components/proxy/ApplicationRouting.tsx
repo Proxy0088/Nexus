@@ -97,8 +97,12 @@ export const ApplicationRouting: React.FC = () => {
         </div>
 
         <div className="proxy-routing-list">
-          {rules.map((rule) => (
-            <div key={rule.appId} className="proxy-routing-row">
+          {rules.map((rule, index) => (
+            <div
+              key={rule.appId}
+              className="proxy-routing-row"
+              style={{ "--row-index": index } as React.CSSProperties}
+            >
               <div className="proxy-routing-app-info">
                 <div className="proxy-routing-app-icon" aria-hidden="true">
                   <GlobeIcon size={22} />

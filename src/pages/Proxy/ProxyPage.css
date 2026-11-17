@@ -27,6 +27,7 @@
   overflow-x: hidden;
   box-sizing: border-box;
   scroll-behavior: smooth;
+  overscroll-behavior-y: contain; /* Rule 19: Rubber band past bounds */
   z-index: 2;
 }
 
@@ -42,6 +43,7 @@
 .proxy-scroll-container::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.18);
   border-radius: 4px;
+  transition: background 160ms ease; /* Rule 15: 20% shorter transitions for exit/release */
 }
 
 .proxy-scroll-container::-webkit-scrollbar-thumb:hover {
@@ -64,7 +66,8 @@
     #4202E7 100%
   );
   transform: rotate(62deg) translate(var(--sphere-x, 0px), var(--sphere-y, 0px));
-  transition: transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Rule 7 & 9: Ease-in-out for object moves without bounce */
+  transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
   pointer-events: none;
   z-index: 1;
@@ -72,13 +75,25 @@
   filter: blur(6px);
 }
 
-/* Initial Viewport Wrapper */
+/* Initial Viewport Wrapper - Rule 1: Ease-out for entrances */
 .proxy-initial-viewport {
   position: relative;
   width: 1136px;
   min-height: 555px;
   box-sizing: border-box;
   z-index: 3;
+  animation: nexusProxyEntrance 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes nexusProxyEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Top 2 Status Cards Row: Connection Status Card & SOCKS5 Card */

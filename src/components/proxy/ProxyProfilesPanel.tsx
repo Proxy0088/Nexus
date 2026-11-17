@@ -93,13 +93,14 @@ export const ProxyProfilesPanel: React.FC<ProxyProfilesPanelProps> = ({
         </div>
 
         <div className="proxy-profiles-list" role="list">
-          {profiles.map((profile) => {
+          {profiles.map((profile, index) => {
             const isActive = profile.id === activeProfileId;
 
             return (
               <div
                 key={profile.id}
                 className={`proxy-profile-item ${isActive ? "is-active" : ""}`}
+                style={{ "--row-index": index } as React.CSSProperties}
                 role="listitem"
               >
                 <div className="proxy-profile-left">
