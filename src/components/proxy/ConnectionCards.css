@@ -1,0 +1,44 @@
+.proxy-status-card {
+  width: 510px;
+  height: 204px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.proxy-status-card-inner {
+  width: 100%;
+  height: 100%;
+  padding: 23px 36px 23px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  box-sizing: border-box;
+  text-align: right;
+  user-select: none;
+}
+
+.proxy-status-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.proxy-label-secondary {
+  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 20px;
+  color: #939393;
+  margin: 0;
+}
+
+.proxy-value-primary {
+  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 32px;
+  line-height: 38px;
+  font-weight: 400;
+  color: #DADADA;
+  margin: 0;
+  letter-spacing: -0.01em;
+}

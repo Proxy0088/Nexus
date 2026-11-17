@@ -75,6 +75,19 @@
   gap: 0;
 }
 
+.nexus-content-area.is-proxy {
+  max-width: 1136px;
+  gap: 0;
+}
+
+.nexus-proxy-route-container {
+  width: 1136px;
+  height: 555px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Tab change transition animation */
 .nexus-tab-content-enter {
   animation: nexusTabFadeIn 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;

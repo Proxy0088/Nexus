@@ -1,0 +1,320 @@
+/* Extended Sections: Proxy Configuration, Application Routing, Diagnostics */
+
+.proxy-extended-card {
+  width: 920px;
+  min-height: 200px;
+  box-sizing: border-box;
+  margin: 0 auto 28px auto;
+  user-select: none;
+}
+
+.proxy-extended-inner {
+  padding: 31px 43px 36px 43px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.proxy-section-title {
+  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 36px;
+  color: #DADADA;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.proxy-section-desc {
+  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #939393;
+  margin: 6px 0 0 0;
+}
+
+/* Form Styles */
+.proxy-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 24px;
+}
+
+.proxy-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.proxy-form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.proxy-form-label {
+  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  color: #939393;
+}
+
+.proxy-input-field {
+  width: 100%;
+  height: 44px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  color: #DADADA;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.proxy-input-field:focus {
+  border-color: rgba(255, 255, 255, 0.40);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.proxy-protocol-segmented {
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 4px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.proxy-protocol-tab {
+  flex: 1;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: #939393;
+  font-family: "Comic Sans MS", sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.proxy-protocol-tab.is-selected {
+  background: rgba(255, 255, 255, 0.14);
+  color: #DADADA;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.proxy-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.proxy-btn-secondary {
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #DADADA;
+  font-family: "Comic Sans MS", sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.proxy-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.proxy-btn-primary {
+  height: 42px;
+  padding: 0 24px;
+  border-radius: 20px;
+  background: rgba(30, 213, 59, 0.25);
+  border: 1px solid rgba(30, 213, 59, 0.50);
+  color: #1ED53B;
+  font-family: "Comic Sans MS", sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.proxy-btn-primary:hover {
+  background: rgba(30, 213, 59, 0.35);
+  border-color: rgba(30, 213, 59, 0.70);
+  transform: translateY(-1px);
+}
+
+/* Application Routing Styles */
+.proxy-routing-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.proxy-routing-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  transition: background 140ms ease;
+}
+
+.proxy-routing-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.proxy-routing-app-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.proxy-routing-app-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #DADADA;
+}
+
+.proxy-routing-app-name {
+  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 18px;
+  color: #DADADA;
+  margin: 0;
+}
+
+.proxy-routing-app-status {
+  font-family: "Comic Sans MS", sans-serif;
+  font-size: 13px;
+  color: #939393;
+  margin: 0;
+}
+
+.proxy-routing-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.proxy-routing-select {
+  height: 38px;
+  padding: 0 14px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  color: #DADADA;
+  font-family: "Comic Sans MS", sans-serif;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.proxy-routing-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Comic Sans MS", sans-serif;
+  font-size: 13px;
+  color: #939393;
+  cursor: pointer;
+}
+
+/* Diagnostics Cards Grid */
+.proxy-diagnostics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 920px;
+  margin: 0 auto 36px auto;
+}
+
+.proxy-diagnostic-card {
+  height: 154px;
+  box-sizing: border-box;
+}
+
+.proxy-diagnostic-inner {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.proxy-diagnostic-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.proxy-diagnostic-title {
+  font-family: "Comic Sans MS", sans-serif;
+  font-size: 14px;
+  color: #939393;
+  margin: 0;
+}
+
+.proxy-diagnostic-icon {
+  color: #DADADA;
+}
+
+.proxy-diagnostic-value {
+  font-family: "Comic Sans MS", sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: #DADADA;
+  margin: 4px 0 0 0;
+}
+
+.proxy-diagnostic-status {
+  font-family: "Comic Sans MS", sans-serif;
+  font-size: 13px;
+  color: #1ED53B;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.proxy-diagnostic-status.is-muted {
+  color: #939393;
+}
+
+/* Modal Overlay */
+.proxy-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.proxy-modal-box {
+  width: 580px;
+  border-radius: 36px;
+  box-shadow: 0 32px 72px rgba(0, 0, 0, 0.85);
+}

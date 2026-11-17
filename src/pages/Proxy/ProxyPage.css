@@ -1,0 +1,109 @@
+/* Proxy Tab Precision Styles (Figma Frame 5: 1136x555 with Dedicated Scroll Container) */
+
+.proxy-page {
+  position: relative;
+  width: 1136px;
+  height: 555px;
+  border-radius: 41px;
+  background: rgba(51, 51, 51, 0.33);
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
+    0 24px 64px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* Dedicated Isolated Vertical Scroll Container */
+.proxy-scroll-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  z-index: 2;
+}
+
+/* Custom subtle scrollbar that preserves dark glass aesthetics */
+.proxy-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.proxy-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.proxy-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+
+.proxy-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* Decorative Purple Radial Gradient Ellipse */
+.proxy-purple-ellipse {
+  position: absolute;
+  width: 583.48px;
+  height: 583.48px;
+  left: 540px;
+  top: 260px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    #B9A7E8 0%,
+    #8661E7 44%,
+    #5F33D2 76%,
+    #4202E7 100%
+  );
+  transform: rotate(62deg);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.95;
+  filter: blur(6px);
+}
+
+/* Initial Viewport Wrapper */
+.proxy-initial-viewport {
+  position: relative;
+  width: 1136px;
+  min-height: 555px;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+/* Top 2 Status Cards Row: Connection Status Card & SOCKS5 Card */
+.proxy-top-cards-row {
+  display: flex;
+  align-items: center;
+  gap: 43px;
+  margin: 14px 0 0 36px;
+  width: 1063px;
+  box-sizing: border-box;
+}
+
+/* Proxy Profiles Panel Wrapper in initial viewport */
+.proxy-profiles-wrapper {
+  margin-top: 64px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Extended Sections (Below the fold) */
+.proxy-extended-content {
+  position: relative;
+  z-index: 3;
+  margin-top: 32px;
+  padding-bottom: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
