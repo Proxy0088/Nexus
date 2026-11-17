@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { ProxyHeader } from "@/components/proxy/ProxyHeader";
 import { ConnectionStatusCard } from "@/components/proxy/ConnectionStatusCard";
 import { Socks5Card } from "@/components/proxy/Socks5Card";
@@ -48,32 +48,74 @@ const INITIAL_PROFILES: ProxyProfile[] = [
   },
 ];
 
-export const ProxyPage: React.FC = () => {
+export interface ProxyPageProps {
+  isExiting?: boolean;
+}
+
+export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
   const [profiles, setProfiles] = useState<ProxyProfile[]>(INITIAL_PROFILES);
   const [activeProfileId, setActiveProfileId] = useState("de-main");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
+  const sphereRef = useRef<HTMLDivElement>(null);
+  const rectCacheRef = useRef<DOMRect | null>(null);
+  const mouseRafRef = useRef<number | null>(null);
+  const pendingPointerRef = useRef({ x: 0, y: 0 });
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!pageRef.current) return;
-    const rect = pageRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const normX = Math.max(-1, Math.min(1, (e.clientX - centerX) / (rect.width / 2)));
-    const normY = Math.max(-1, Math.min(1, (e.clientY - centerY) / (rect.height / 2)));
-
-    // Subtle, organic parallax displacement of the purple sphere
-    const offsetX = (normX * 36).toFixed(1);
-    const offsetY = (normY * 24).toFixed(1);
-
-    pageRef.current.style.setProperty("--sphere-x", `${offsetX}px`);
-    pageRef.current.style.setProperty("--sphere-y", `${offsetY}px`);
+  useEffect(() => {
+    const invalidateRect = () => {
+      rectCacheRef.current = null;
+    };
+    window.addEventListener("resize", invalidateRect);
+    return () => {
+      window.removeEventListener("resize", invalidateRect);
+      if (mouseRafRef.current) cancelAnimationFrame(mouseRafRef.current);
+    };
   }, []);
 
+  const handleMouseEnter = useCallback(() => {
+    if (pageRef.current) {
+      rectCacheRef.current = pageRef.current.getBoundingClientRect();
+    }
+  }, []);
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (isExiting || !sphereRef.current) return;
+      pendingPointerRef.current.x = e.clientX;
+      pendingPointerRef.current.y = e.clientY;
+
+      if (mouseRafRef.current) return;
+      mouseRafRef.current = requestAnimationFrame(() => {
+        mouseRafRef.current = null;
+        if (!sphereRef.current || !pageRef.current) return;
+
+        const rect = rectCacheRef.current ?? pageRef.current.getBoundingClientRect();
+        rectCacheRef.current = rect;
+
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const normX = Math.max(-1, Math.min(1, (pendingPointerRef.current.x - centerX) / (rect.width / 2)));
+        const normY = Math.max(-1, Math.min(1, (pendingPointerRef.current.y - centerY) / (rect.height / 2)));
+
+        // Subtle, small organic mouse parallax (±12px X, ±8px Y) — GPU transform only, zero card reflow
+        const offsetX = (normX * 12).toFixed(1);
+        const offsetY = (normY * 8).toFixed(1);
+
+        sphereRef.current.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) rotate(60.73deg)`;
+      });
+    },
+    [isExiting]
+  );
+
   const handleMouseLeave = useCallback(() => {
-    if (!pageRef.current) return;
-    pageRef.current.style.setProperty("--sphere-x", "0px");
-    pageRef.current.style.setProperty("--sphere-y", "0px");
+    if (mouseRafRef.current) {
+      cancelAnimationFrame(mouseRafRef.current);
+      mouseRafRef.current = null;
+    }
+    if (sphereRef.current) {
+      sphereRef.current.style.transform = "translate3d(0px, 0px, 0) rotate(60.73deg)";
+    }
   }, []);
 
   const activeProfile = profiles.find((p) => p.id === activeProfileId) || profiles[0];
@@ -101,32 +143,39 @@ export const ProxyPage: React.FC = () => {
   return (
     <div
       ref={pageRef}
-      className="proxy-page"
+      className={`proxy-page ${isExiting ? "is-exiting" : ""}`.trim()}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       aria-label="Proxy Manager Dashboard"
     >
-      {/* Decorative Purple Radial Gradient Sphere - Anchored to proxy window, behind internal cards */}
-      <div className="proxy-purple-ellipse" aria-hidden="true" />
-
       {/* Isolated Vertical Scroll Container */}
       <div className="proxy-scroll-container">
-        {/* Section 1: Initial Viewport Frame (Exact 1136x555 geometries) */}
+        {/* Decorative Emerald/Teal 3D Sphere — Anchored cleanly above Proxy Profiles with subtle mouse parallax */}
+        <div ref={sphereRef} className="proxy-purple-ellipse" aria-hidden="true" />
+
+        {/* Section 1: Initial Viewport Frame */}
         <div className="proxy-initial-viewport">
           {/* Header */}
-          <ProxyHeader statusText="Connected" isConnected={true} />
+          <div className="proxy-stagger-header">
+            <ProxyHeader statusText="Connected" isConnected={true} />
+          </div>
 
           {/* Top 2 Cards: Connection Status Card & SOCKS5 Card */}
           <div className="proxy-top-cards-row">
-            <ConnectionStatusCard status="Stable" lastTest="Just Now" />
-            <Socks5Card
-              protocol={activeProfile.protocol === "SOCKS5" ? "Socks5" : activeProfile.protocol}
-              latencyMs={activeProfile.latencyMs}
-            />
+            <div className="proxy-stagger-card-1">
+              <ConnectionStatusCard status="Stable" lastTest="Just Now" />
+            </div>
+            <div className="proxy-stagger-card-2">
+              <Socks5Card
+                protocol={activeProfile.protocol === "SOCKS5" ? "Socks5" : activeProfile.protocol}
+                latencyMs={activeProfile.latencyMs}
+              />
+            </div>
           </div>
 
           {/* Proxy Profiles Panel (Initial peek starting at Top: 402px) */}
-          <div className="proxy-profiles-wrapper">
+          <div className="proxy-profiles-wrapper proxy-stagger-profiles">
             <ProxyProfilesPanel
               profiles={profiles}
               activeProfileId={activeProfileId}
@@ -138,18 +187,24 @@ export const ProxyPage: React.FC = () => {
 
         {/* Section 2: Extended Content Below the Fold */}
         <div className="proxy-extended-content">
-          <ProxyConfiguration
-            initialValues={{
-              name: activeProfile.name,
-              protocol: activeProfile.protocol,
-              host: activeProfile.host,
-              port: activeProfile.port,
-            }}
-          />
+          <div className="proxy-stagger-ext-1">
+            <ProxyConfiguration
+              initialValues={{
+                name: activeProfile.name,
+                protocol: activeProfile.protocol,
+                host: activeProfile.host,
+                port: activeProfile.port,
+              }}
+            />
+          </div>
 
-          <ApplicationRouting />
+          <div className="proxy-stagger-ext-2">
+            <ApplicationRouting />
+          </div>
 
-          <ConnectionDiagnostics />
+          <div className="proxy-stagger-ext-3">
+            <ConnectionDiagnostics />
+          </div>
         </div>
       </div>
 

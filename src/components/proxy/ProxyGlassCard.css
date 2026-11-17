@@ -1,28 +1,63 @@
+/* Apple Liquid Glass Clear Card — from xenitV1/liquid-glass-skill (apple-liquid-glass) */
+
 .proxy-glass-card {
   position: relative;
-  background: rgba(51, 51, 51, 0.33);
-  backdrop-filter: blur(28px) saturate(140%);
-  -webkit-backdrop-filter: blur(28px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  isolation: isolate;
+  background-color: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  backdrop-filter: saturate(160%) blur(14px);
   box-shadow:
-    inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
-    0 20px 48px rgba(0, 0, 0, 0.45);
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -0.5px 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.18),
+    0 1px 3px rgba(0, 0, 0, 0.12);
   overflow: hidden;
   box-sizing: border-box;
-  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.proxy-glass-canvas {
+/* While live SVG backdrop refraction is active, use Apple's clear glass tint so the rim bend reads crisply */
+.proxy-glass-card.is-refracting {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Apple Liquid Glass bevel rim: catches light on both top-left and bottom-right bevels */
+.proxy-glass-card::before {
+  content: "";
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+  z-index: 3;
   border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(255, 255, 255, 0.08) 48%,
+    rgba(255, 255, 255, 0.30) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+/* Subtle top & bottom specular glass sheen */
+.proxy-glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.10) 0%,
+    rgba(255, 255, 255, 0.02) 28%,
+    transparent 55%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
 }
 
 .proxy-glass-content {
@@ -34,4 +69,33 @@
   font-family: var(--nexus-font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Required fallback: browsers without backdrop-filter support */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .proxy-glass-card,
+  .proxy-glass-card.is-refracting {
+    background-color: rgba(32, 32, 36, 0.94);
+  }
+}
+
+/* Required accessibility fallback: Reduce Transparency */
+@media (prefers-reduced-transparency: reduce) {
+  .proxy-glass-card,
+  .proxy-glass-card.is-refracting {
+    background-color: rgba(32, 32, 36, 0.94);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .proxy-glass-card::after {
+    display: none;
+  }
+}
+
+/* Required accessibility fallback: Reduce Motion */
+@media (prefers-reduced-motion: reduce) {
+  .proxy-glass-card {
+    transition-duration: 0.001ms !important;
+  }
 }

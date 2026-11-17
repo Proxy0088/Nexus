@@ -5,16 +5,18 @@ import "./ConnectionCards.css";
 export interface Socks5CardProps {
   protocol?: string;
   latencyMs?: number;
+  className?: string;
 }
 
 export const Socks5Card: React.FC<Socks5CardProps> = ({
   protocol = "Socks5",
   latencyMs = 42,
+  className = "",
 }) => {
   return (
     <ProxyGlassCard
       cornerRadius={41}
-      className="proxy-status-card"
+      className={`proxy-status-card ${className}`.trim()}
       aria-label="Active Protocol and Latency"
     >
       <div className="proxy-status-card-inner">

@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "skills": {
+    "apple-liquid-glass": {
+      "source": "xenitV1/liquid-glass-skill",
+      "commit": "8cf508b2e5474c80d4ad6a649186f505b8548307",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "fd7cb7227f93f4703ae9a3104adc675a7eae9e3fdd4c0e42771f42c6cf041295"
+    }
+  }
+}

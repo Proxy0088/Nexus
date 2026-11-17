@@ -49,7 +49,11 @@ const DEFAULT_RULES: AppRoutingRule[] = [
   },
 ];
 
-export const ApplicationRouting: React.FC = () => {
+export interface ApplicationRoutingProps {
+  className?: string;
+}
+
+export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ className = "" }) => {
   const [rules, setRules] = useState<AppRoutingRule[]>(DEFAULT_RULES);
 
   const handleProfileChange = (appId: string, profileId: string) => {
@@ -87,7 +91,7 @@ export const ApplicationRouting: React.FC = () => {
   };
 
   return (
-    <ProxyGlassCard cornerRadius={41} className="proxy-extended-card">
+    <ProxyGlassCard cornerRadius={41} className={`proxy-extended-card ${className}`.trim()}>
       <div className="proxy-extended-inner">
         <div>
           <h2 className="proxy-section-title">Application Routing</h2>

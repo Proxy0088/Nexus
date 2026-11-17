@@ -36,9 +36,9 @@
   --nexus-gradient-specular-sheen: transparent;
 
   /* Shadows & Optical Refractions */
-  --nexus-shadow-inner-highlight: inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.60), inset 0 -1.5px 2px 0 rgba(255, 255, 255, 0.10);
-  --nexus-shadow-glass-depth: 0 24px 48px -8px rgba(0, 0, 0, 0.65);
-  --nexus-shadow-pill-active: inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.70), 0 8px 24px rgba(0, 0, 0, 0.50);
+  --nexus-shadow-inner-highlight: inset 0 1px 2px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08);
+  --nexus-shadow-glass-depth: 0 12px 28px -4px rgba(0, 0, 0, 0.25);
+  --nexus-shadow-pill-active: inset 0 1px 2px 0 rgba(255, 255, 255, 0.50), 0 4px 14px rgba(0, 0, 0, 0.20);
 
   /* Radii Scale (Strict nested radius hierarchy) */
   --nexus-radius-sm: 8px;

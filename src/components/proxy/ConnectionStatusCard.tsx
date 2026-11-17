@@ -5,16 +5,18 @@ import "./ConnectionCards.css";
 export interface ConnectionStatusCardProps {
   status?: string;
   lastTest?: string;
+  className?: string;
 }
 
 export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
   status = "Stable",
   lastTest = "Just Now",
+  className = "",
 }) => {
   return (
     <ProxyGlassCard
       cornerRadius={41}
-      className="proxy-status-card"
+      className={`proxy-status-card ${className}`.trim()}
       aria-label="Connection Status Overview"
     >
       <div className="proxy-status-card-inner">

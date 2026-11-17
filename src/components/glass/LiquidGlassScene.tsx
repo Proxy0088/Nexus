@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import { LiquidGlass } from "@ybouane/liquidglass";
+import React from "react";
 import type { GlassConfig } from "@ybouane/liquidglass";
 
 export interface LiquidGlassSceneProps {
@@ -9,75 +8,18 @@ export interface LiquidGlassSceneProps {
   style?: React.CSSProperties;
 }
 
-const DEFAULT_GLASS_CONFIG: Partial<GlassConfig> = {
-  blurAmount: 0.25,
-  refraction: 0.55,
-  chromAberration: 0.05,
-  edgeHighlight: 0.14,
-  specular: 0.12,
-  fresnel: 0.95,
-  zRadius: 24,
-  shadowOpacity: 0.28,
-};
-
 /**
- * LiquidGlassScene integrates @ybouane/liquidglass based on Apple-LiquidGlass-Skill.
- * It orchestrates WebGL optical refraction, chromatic aberration, rim lighting,
- * and specular highlights over all child elements annotated with data-glass="true".
+ * Lightweight scene wrapper.
+ * Individual interactive surfaces (BottomNav WebGL pill & Proxy SVG backdrop refraction)
+ * manage their own scoped, zero-overhead pipelines without running a full-viewport WebGL loop.
  */
 export const LiquidGlassScene: React.FC<LiquidGlassSceneProps> = ({
   children,
-  defaults = DEFAULT_GLASS_CONFIG,
   className = "",
   style,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const rootEl = containerRef.current;
-    if (!rootEl) return;
-
-    let liquidInstance: LiquidGlass | null = null;
-    let isMounted = true;
-
-    // Give DOM a frame to compute layout and ensure background images are ready
-    const timer = setTimeout(() => {
-      const glassNodes = rootEl.querySelectorAll<HTMLElement>('[data-glass="true"]');
-
-      LiquidGlass.init({
-        root: rootEl,
-        glassElements: Array.from(glassNodes),
-        defaults,
-      })
-        .then((instance) => {
-          if (!isMounted) {
-            instance.destroy();
-          } else {
-            liquidInstance = instance;
-            (window as any).__nexusLiquidGlass = instance;
-            window.dispatchEvent(new CustomEvent("nexus:liquidglass-ready", { detail: instance }));
-          }
-        })
-        .catch((err) => {
-          console.warn("LiquidGlass WebGL pipeline initialization fallback to CSS:", err);
-        });
-    }, 50);
-
-    return () => {
-      isMounted = false;
-      clearTimeout(timer);
-      if (liquidInstance) {
-        try {
-          liquidInstance.destroy();
-        } catch (e) {
-          console.warn("Error during LiquidGlass destruction:", e);
-        }
-      }
-    };
-  }, [defaults]);
-
   return (
-    <div ref={containerRef} className={className} style={style}>
+    <div className={className} style={style}>
       {children}
     </div>
   );

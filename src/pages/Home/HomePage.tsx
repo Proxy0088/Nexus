@@ -1,15 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { TopBar } from "@/components/layout/TopBar";
 import { BottomNav, NavTabId } from "@/components/navigation/BottomNav";
 import { LiquidGlassPanel } from "@/components/glass/LiquidGlassPanel";
 import { LiquidGlassScene } from "@/components/glass/LiquidGlassScene";
 import { ProxyPage } from "@/pages/Proxy";
+import backgroundImage from "@/assets/background.png";
 import "./HomePage.css";
 
 export const HomePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<NavTabId>("home");
+  const [displayTab, setDisplayTab] = useState<NavTabId>("home");
+  const [isExiting, setIsExiting] = useState(false);
+  const exitTimerRef = useRef<number | null>(null);
   const [, setSearchQuery] = useState("");
-  const isHome = activeTab === "home";
+
+  const isNavHome = activeTab === "home";
+
+  const handleTabChange = (nextTab: NavTabId) => {
+    if (nextTab === activeTab) return;
+
+    // Immediately trigger bottom nav sliding indicator towards target
+    setActiveTab(nextTab);
+
+    // Start graceful exit animation on current tab elements
+    setIsExiting(true);
+
+    if (exitTimerRef.current) {
+      clearTimeout(exitTimerRef.current);
+    }
+
+    exitTimerRef.current = window.setTimeout(() => {
+      setDisplayTab(nextTab);
+      setIsExiting(false);
+      exitTimerRef.current = null;
+    }, 180);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (exitTimerRef.current) {
+        clearTimeout(exitTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -26,7 +59,11 @@ export const HomePage: React.FC = () => {
   return (
     <LiquidGlassScene className="nexus-app-root">
       {/* Background layer (Figma node 2:6 / 12) */}
-      <div className="nexus-bg-layer" aria-hidden="true" />
+      <div
+        className="nexus-bg-layer"
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+        aria-hidden="true"
+      />
 
       {/* Main Container Frame (Figma node 2:12 - 1340x836) */}
       <section className="nexus-main-frame" aria-label="Nexus Dashboard">
@@ -38,45 +75,55 @@ export const HomePage: React.FC = () => {
         />
 
         {/* Content Area: Fluid Morphing Panels between Home and Other Tabs */}
-        <div className={`nexus-content-area ${isHome ? "is-home" : "is-other"} ${activeTab === "proxy" ? "is-proxy" : ""}`}>
+        <div className={`nexus-content-area ${isNavHome ? "is-home" : "is-other"}`}>
           {/* Left Content Panel (Slides in when entering Home, slides out on reverse) */}
           <LiquidGlassPanel
             variant="panel"
             enableCanvas={false}
-            className={`nexus-left-panel ${isHome ? "panel-visible" : "panel-hidden"}`}
+            className={`nexus-left-panel ${isNavHome ? "panel-visible" : "panel-hidden"}`}
             aria-label="Left Content Panel"
           />
 
-          {/* Right Content Panel / Proxy View */}
-          {activeTab === "proxy" ? (
-            <div className="nexus-proxy-route-container nexus-tab-content-enter">
-              <ProxyPage />
-            </div>
-          ) : (
-            <LiquidGlassPanel
-              variant="panel"
-              enableCanvas={false}
-              className={`nexus-right-panel ${isHome ? "panel-home" : "panel-expanded"}`}
-              aria-label="Right Content Panel"
-            >
-              {isHome ? (
-                <div className="nexus-home-panel-content" />
-              ) : (
-                <div key={activeTab} className="nexus-module-placeholder nexus-tab-content-enter">
-                  <h2 className="nexus-module-placeholder-title">
-                    {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Module
-                  </h2>
-                  <p className="nexus-module-placeholder-desc">
-                    This internal module route is prepared. Implementation scheduled for next phase.
-                  </p>
-                </div>
-              )}
-            </LiquidGlassPanel>
-          )}
+          {/* Right Content Panel / Active Module View */}
+          <LiquidGlassPanel
+            variant="panel"
+            enableCanvas={false}
+            className={`nexus-right-panel ${isNavHome ? "panel-home" : "panel-expanded"} ${displayTab === "proxy" ? "panel-proxy" : ""}`}
+            aria-label="Right Content Panel"
+          >
+            {displayTab === "home" && (
+              <div
+                className={`nexus-home-panel-content ${isExiting ? "nexus-tab-content-exit" : "nexus-tab-content-enter"}`}
+              />
+            )}
+
+            {displayTab === "proxy" && (
+              <div
+                key="proxy"
+                className={`nexus-proxy-route-wrapper ${isExiting ? "nexus-tab-content-exit" : "nexus-tab-content-enter"}`}
+              >
+                <ProxyPage isExiting={isExiting} />
+              </div>
+            )}
+
+            {displayTab !== "home" && displayTab !== "proxy" && (
+              <div
+                key={displayTab}
+                className={`nexus-module-placeholder ${isExiting ? "nexus-tab-content-exit" : "nexus-tab-content-enter"}`}
+              >
+                <h2 className="nexus-module-placeholder-title">
+                  {displayTab.charAt(0).toUpperCase() + displayTab.slice(1)} Module
+                </h2>
+                <p className="nexus-module-placeholder-desc">
+                  This internal module route is prepared. Implementation scheduled for next phase.
+                </p>
+              </div>
+            )}
+          </LiquidGlassPanel>
         </div>
 
         {/* Bottom Navigation Bar */}
-        <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+        <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
       </section>
     </LiquidGlassScene>
   );

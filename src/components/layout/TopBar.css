@@ -10,6 +10,17 @@
   z-index: 20;
 }
 
+@keyframes nexusTopBarEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Search Bar (Figma Rectangle 1: 463x60 at x:21, y:7) */
 .nexus-search-container {
   display: flex;
@@ -24,6 +35,8 @@
   border-radius: var(--nexus-radius-search);
   box-sizing: border-box;
   transition: all var(--nexus-transition-fast);
+  animation: nexusTopBarEnter 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 50ms;
 }
 
 .nexus-search-input {
@@ -66,6 +79,8 @@
   align-items: center;
   justify-content: center;
   user-select: none;
+  animation: nexusTopBarEnter 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 110ms;
 }
 
 .nexus-title {
@@ -87,6 +102,8 @@
   display: flex;
   align-items: center;
   gap: 27px;
+  animation: nexusTopBarEnter 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 170ms;
 }
 
 /* Notification Reminder Button (Figma Reminder: 26x26 at x:972, y:24) */

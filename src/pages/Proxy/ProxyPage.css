@@ -1,24 +1,17 @@
-/* Proxy Tab Precision Styles (Figma Frame 5: 1136x555 with Dedicated Scroll Container) */
+/* Proxy Tab Precision Styles — Optimized GPU Compositing (No Heavy Blur) */
 
 .proxy-page {
   position: relative;
-  width: 1136px;
-  height: 555px;
-  border-radius: 41px;
-  background: rgba(51, 51, 51, 0.33);
-  backdrop-filter: blur(28px) saturate(140%);
-  -webkit-backdrop-filter: blur(28px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow:
-    inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
-    0 24px 64px rgba(0, 0, 0, 0.65);
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
   overflow: hidden;
   box-sizing: border-box;
   user-select: none;
 }
 
-/* Dedicated Isolated Vertical Scroll Container */
+/* Dedicated Isolated Vertical Scroll Container
+   (No `contain: layout` here so backdrop-filter on glass cards can refract the 3D purple sphere behind it!) */
 .proxy-scroll-container {
   position: relative;
   width: 100%;
@@ -27,11 +20,11 @@
   overflow-x: hidden;
   box-sizing: border-box;
   scroll-behavior: smooth;
-  overscroll-behavior-y: contain; /* Rule 19: Rubber band past bounds */
+  overscroll-behavior-y: contain;
   z-index: 2;
 }
 
-/* Custom subtle scrollbar that preserves dark glass aesthetics */
+/* Custom subtle scrollbar */
 .proxy-scroll-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -43,76 +36,163 @@
 .proxy-scroll-container::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.18);
   border-radius: 4px;
-  transition: background 160ms ease; /* Rule 15: 20% shorter transitions for exit/release */
+  transition: background 140ms ease;
 }
 
 .proxy-scroll-container::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.32);
 }
 
-/* Decorative Purple Radial Gradient Ellipse with Smooth Parallax */
+/* Staggered Entrance Keyframes — Pure GPU Compositor (translate3d + opacity) */
+@keyframes nexusCascadeEntrance {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes nexusSphereFloatIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) rotate(54.73deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(60.73deg);
+  }
+}
+
+/* Reverse Staggered Exit Animation — Pure GPU Compositor (Zero Blur Filter) */
+@keyframes nexusElementExit {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+.proxy-page.is-exiting .proxy-stagger-header {
+  animation: nexusElementExit 130ms cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  animation-delay: 0ms !important;
+}
+
+.proxy-page.is-exiting .proxy-stagger-card-2 {
+  animation: nexusElementExit 130ms cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  animation-delay: 15ms !important;
+}
+
+.proxy-page.is-exiting .proxy-stagger-card-1 {
+  animation: nexusElementExit 130ms cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  animation-delay: 30ms !important;
+}
+
+.proxy-page.is-exiting .proxy-stagger-profiles {
+  animation: nexusElementExit 130ms cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  animation-delay: 45ms !important;
+}
+
+.proxy-page.is-exiting .proxy-purple-ellipse {
+  animation: nexusElementExit 150ms cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  animation-delay: 15ms !important;
+}
+
+/* Decorative Emerald/Teal 3D Sphere (Figma Ellipse 2 — under Connection Status Card, ON TOP of Proxy Profiles) */
 .proxy-purple-ellipse {
   position: absolute;
-  width: 500px;
-  height: 500px;
-  left: 740px;
-  top: 280px;
+  width: 240px;
+  height: 240px;
+  left: -20px;
+  top: 192px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    #B9A7E8 0%,
-    #8661E7 44%,
-    #5F33D2 76%,
-    #4202E7 100%
+  background-color: #007567;
+  background-image: radial-gradient(
+    75.8% 75.8% at 31.8% 27.3%,
+    #D4FFF5 0%,
+    #A3EEDC 18%,
+    #49D4B7 43%,
+    #0FB294 65%,
+    #089482 83%,
+    #007567 100%
   );
-  /* Translate on screen X/Y axes first, then apply texture rotation */
-  transform: translate3d(var(--sphere-x, 0px), var(--sphere-y, 0px), 0) rotate(62deg);
-  /* Responsive, instant parallax response without sluggish delay */
-  transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow:
+    inset -8px -8px 20px rgba(0, 46, 40, 0.24),
+    0 12px 26px rgba(0, 0, 0, 0.24);
+  transform: translate3d(0px, 0px, 0) rotate(60.73deg);
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
   pointer-events: none;
-  z-index: 1;
-  opacity: 0.95;
-  filter: blur(6px);
+  z-index: 2;
+  opacity: 1;
+  animation: nexusSphereFloatIn 550ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 40ms;
 }
 
-/* Initial Viewport Wrapper - Rule 1: Ease-out for entrances */
+/* Initial Viewport Wrapper (no z-index so top cards, sphere, and profiles share one stacking order) */
 .proxy-initial-viewport {
   position: relative;
-  width: 1136px;
+  width: 100%;
   min-height: 555px;
   box-sizing: border-box;
-  z-index: 3;
-  animation: nexusProxyEntrance 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes nexusProxyEntrance {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Stagger 1: Header (backwards fill-mode releases transform after entrance so it never creates a backdrop root) */
+.proxy-stagger-header {
+  position: relative;
+  z-index: 4;
+  animation: nexusCascadeEntrance 400ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 50ms;
 }
 
-/* Top 2 Status Cards Row: Connection Status Card & SOCKS5 Card */
+/* Top 2 Status Cards Row: sits ABOVE the 3D sphere (z-index: 4 > 2) so Liquid Glass refracts it */
 .proxy-top-cards-row {
+  position: relative;
+  z-index: 4;
   display: flex;
   align-items: center;
-  gap: 43px;
-  margin: 14px 0 0 36px;
-  width: 1063px;
+  justify-content: center;
+  gap: 30px;
+  margin: 14px auto 0 auto;
+  width: 1050px;
+  max-width: calc(100% - 48px);
   box-sizing: border-box;
 }
 
-/* Proxy Profiles Panel Wrapper in initial viewport */
+/* Stagger 2: Card 1 */
+.proxy-stagger-card-1 {
+  flex: 1;
+  max-width: 510px;
+  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 110ms;
+}
+
+/* Stagger 3: Card 2 */
+.proxy-stagger-card-2 {
+  flex: 1;
+  max-width: 510px;
+  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 170ms;
+}
+
+/* Stagger 4: Proxy Profiles Panel Wrapper — sits BELOW the 3D sphere (z-index: 1 < 2) so sphere overlaps on top of it */
 .proxy-profiles-wrapper {
+  position: relative;
+  z-index: 1;
   margin-top: 64px;
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.proxy-stagger-profiles {
+  animation: nexusCascadeEntrance 450ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 230ms;
 }
 
 /* Extended Sections (Below the fold) */
@@ -124,4 +204,20 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+/* Staggered Extended Content */
+.proxy-stagger-ext-1 {
+  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 290ms;
+}
+
+.proxy-stagger-ext-2 {
+  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 350ms;
+}
+
+.proxy-stagger-ext-3 {
+  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 410ms;
 }

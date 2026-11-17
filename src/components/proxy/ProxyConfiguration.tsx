@@ -8,6 +8,7 @@ export interface ProxyConfigurationProps {
   onTest?: (config: ProxyConfigValues) => void;
   onCancel?: () => void;
   initialValues?: Partial<ProxyConfigValues>;
+  className?: string;
 }
 
 export interface ProxyConfigValues {
@@ -24,6 +25,7 @@ export const ProxyConfiguration: React.FC<ProxyConfigurationProps> = ({
   onTest,
   onCancel,
   initialValues,
+  className = "",
 }) => {
   const [name, setName] = useState(initialValues?.name || "Germany Server");
   const [protocol, setProtocol] = useState<"HTTP" | "HTTPS" | "SOCKS5">(
@@ -52,7 +54,7 @@ export const ProxyConfiguration: React.FC<ProxyConfigurationProps> = ({
   };
 
   return (
-    <ProxyGlassCard cornerRadius={41} className="proxy-extended-card">
+    <ProxyGlassCard cornerRadius={41} className={`proxy-extended-card ${className}`.trim()}>
       <form onSubmit={handleSave} className="proxy-extended-inner">
         <div>
           <h2 className="proxy-section-title">Proxy Configuration</h2>

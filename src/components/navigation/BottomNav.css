@@ -1,4 +1,4 @@
-/* Bottom Navigation Bar Styles — True WebGL Liquid Glass Navigation */
+/* Bottom Navigation Bar Styles — Official @ybouane/liquidglass Sliding Lens */
 
 .nexus-bottom-nav-container {
   display: flex;
@@ -12,14 +12,15 @@
   border-radius: var(--nexus-radius-navbar);
   box-sizing: border-box;
   pointer-events: auto;
+  overflow: hidden;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(28px) saturate(145%);
-  -webkit-backdrop-filter: blur(28px) saturate(145%);
-  border: 1px solid rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow:
-    inset 0 1px 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.30),
     inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
-    0 20px 44px -8px rgba(0, 0, 0, 0.65);
+    0 10px 24px -4px rgba(0, 0, 0, 0.22);
 }
 
 .nexus-bottom-nav-bar {
@@ -34,53 +35,76 @@
   pointer-events: auto;
 }
 
-/* ─── Active Capsule Sliding Indicator ─── */
+/* Layer 0: Offscreen-sampled backdrop canvas for LiquidGlass */
+.nexus-nav-backdrop-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Direct-Child Active Capsule Sliding LiquidGlass Lens ─── */
 .nexus-nav-sliding-indicator {
   position: absolute;
   top: 5px;
   left: 0;
   height: 66px;
-  pointer-events: none;
-  z-index: 1;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  z-index: 2;
   border-radius: var(--nexus-radius-pill);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.30),
+    0 4px 12px -2px rgba(0, 0, 0, 0.18);
   transform: translateZ(0);
   backface-visibility: hidden;
-  /* Rule 9: Ease-in-out for moves between tabs */
   transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1),
-              width 280ms cubic-bezier(0.4, 0, 0.2, 1);
+              width 280ms cubic-bezier(0.4, 0, 0.2, 1),
+              background 180ms ease;
   will-change: transform, width;
 }
 
-.nexus-nav-active-pill {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow:
-    inset 0 1px 2px 0 rgba(255, 255, 255, 0.40),
-    0 8px 24px -2px rgba(0, 0, 0, 0.50);
+.nexus-nav-sliding-indicator.is-dragging {
+  cursor: grabbing;
+  transition: none !important;
 }
 
-/* WebGL Liquid Glass Canvas inside Active Pill */
-.nexus-nav-glass-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+/* Once WebGL LiquidGlass canvas is mounted inside, keep interior 100% crystal-clear */
+.nexus-nav-sliding-indicator.is-glass-ready {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+.nexus-nav-sliding-indicator > canvas {
   border-radius: inherit;
   pointer-events: none;
 }
 
-/* ─── Navigation Buttons ─── */
+@keyframes nexusNavItemStagger {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Navigation Buttons (z-index: 1 so the LiquidGlass capsule at z-index: 2 refracts them) ─── */
 .nexus-nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+  gap: 3px;
   width: 140px;
   height: 66px;
   border-radius: var(--nexus-radius-pill);
@@ -88,10 +112,12 @@
   border: none;
   cursor: pointer;
   position: relative;
-  z-index: 2;
-  color: var(--nexus-color-text-secondary);
+  z-index: 1;
+  color: #C8C8D0;
   transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
               color 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: nexusNavItemStagger 340ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: calc(var(--item-index, 0) * 35ms + 120ms);
   text-decoration: none;
   outline: none;
   user-select: none;
@@ -101,48 +127,45 @@
 }
 
 .nexus-nav-item:hover:not(.active) {
-  color: var(--nexus-color-text-primary);
+  color: #EDEDED;
   background: rgba(255, 255, 255, 0.04);
 }
 
 .nexus-nav-item:active {
-  /* Rule 4: Scale to 0.97 on press */
   transform: scale(0.97);
   transition-duration: 70ms;
 }
 
 .nexus-nav-item.active {
-  color: var(--nexus-color-text-primary);
+  color: #EDEDED;
 }
 
 .nexus-nav-icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  margin-top: 11px;
+  width: 22px;
+  height: 22px;
   transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .nexus-nav-item:hover .nexus-nav-icon-wrapper {
-  transform: translateY(-2px) scale(1.08);
+  transform: scale(1.06);
 }
 
 .nexus-nav-item.active .nexus-nav-icon-wrapper {
-  transform: translateY(-1px) scale(1.04);
+  transform: scale(1.02);
 }
 
 .nexus-nav-label {
   font-family: var(--nexus-font-family);
   font-size: 11px;
   font-weight: 500;
-  line-height: 16px;
+  line-height: 14px;
   letter-spacing: 0.01em;
   text-align: center;
   white-space: nowrap;
   color: inherit;
-  margin-top: 1px;
   transition: transform 180ms ease, opacity 180ms ease;
 }
 

@@ -19,7 +19,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background-image: url("/assets/background.png");
+  background-image: url("@/assets/background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -37,13 +37,13 @@
   max-height: calc(100vh - 40px);
   border-radius: var(--nexus-radius-main);
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(28px) saturate(145%);
-  -webkit-backdrop-filter: blur(28px) saturate(145%);
+  backdrop-filter: blur(16px) saturate(135%);
+  -webkit-backdrop-filter: blur(16px) saturate(135%);
   border: 1px solid rgba(255, 255, 255, 0.20);
   box-shadow:
     inset 0 1px 2px 0 rgba(255, 255, 255, 0.35),
     inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
-    0 32px 72px 0 rgba(0, 0, 0, 0.75);
+    0 16px 40px 0 rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,7 +51,7 @@
   padding: 36px 30px 22px 30px;
   box-sizing: border-box;
   overflow: hidden;
-  transition: all var(--nexus-transition-glass);
+  contain: layout style;
 }
 
 /* Content Area: Fluid Morphing Panels between Home and Other Tabs */
@@ -75,32 +75,47 @@
   gap: 0;
 }
 
-.nexus-content-area.is-proxy {
-  max-width: 1136px;
-  gap: 0;
+.nexus-right-panel.panel-proxy {
+  padding: 0;
 }
 
-.nexus-proxy-route-container {
-  width: 1136px;
-  height: 555px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.nexus-proxy-route-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Tab change transition animation */
+/* Tab change transition animation — backwards releases transform after enter so child backdrop-filter works cleanly */
 .nexus-tab-content-enter {
-  animation: nexusTabFadeIn 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: nexusTabFadeIn 220ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.nexus-tab-content-exit {
+  animation: nexusTabFadeOut 160ms cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
 @keyframes nexusTabFadeIn {
   0% {
     opacity: 0;
-    transform: translateY(6px) scale(0.995);
+    transform: translate3d(0, 6px, 0);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes nexusTabFadeOut {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -6px, 0);
   }
 }
 
@@ -184,6 +199,8 @@
   font-weight: 500;
   color: var(--nexus-color-text-primary);
   font-family: var(--nexus-font-family);
+  animation: nexusTabFadeIn 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 60ms;
 }
 
 .nexus-module-placeholder-desc {
@@ -191,6 +208,8 @@
   line-height: 18px;
   color: var(--nexus-color-text-muted);
   max-width: 400px;
+  animation: nexusTabFadeIn 340ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 130ms;
 }
 
 /* Responsive adjustments */
