@@ -65,9 +65,10 @@
     #5F33D2 76%,
     #4202E7 100%
   );
-  transform: rotate(62deg) translate(var(--sphere-x, 0px), var(--sphere-y, 0px));
-  /* Rule 7 & 9: Ease-in-out for object moves without bounce */
-  transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* Translate on screen X/Y axes first, then apply texture rotation */
+  transform: translate3d(var(--sphere-x, 0px), var(--sphere-y, 0px), 0) rotate(62deg);
+  /* Responsive, instant parallax response without sluggish delay */
+  transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
   pointer-events: none;
   z-index: 1;

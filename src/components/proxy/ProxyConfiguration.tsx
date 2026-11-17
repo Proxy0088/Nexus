@@ -157,7 +157,7 @@ export const ProxyConfiguration: React.FC<ProxyConfigurationProps> = ({
         </div>
 
         {testResult && (
-          <div style={{ color: "#1ED53B", fontSize: "14px", fontFamily: "Comic Sans MS, sans-serif" }}>
+          <div style={{ color: "#1ED53B", fontSize: "13px", fontWeight: 500, fontFamily: "var(--nexus-font-family)" }}>
             ✓ {testResult}
           </div>
         )}

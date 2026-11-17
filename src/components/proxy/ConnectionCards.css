@@ -16,7 +16,7 @@
 .proxy-status-card-inner {
   width: 100%;
   height: 100%;
-  padding: 23px 36px 23px 28px;
+  padding: 24px 32px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -30,23 +30,26 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 2px;
+  gap: 4px;
 }
 
 .proxy-label-secondary {
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 15px;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 14px;
   line-height: 20px;
-  color: #939393;
+  font-weight: 400;
+  color: #A1A1A6;
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .proxy-value-primary {
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
   font-size: 32px;
   line-height: 38px;
-  font-weight: 400;
-  color: #DADADA;
+  font-weight: 500;
+  color: #EDEDED;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }

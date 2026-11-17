@@ -64,7 +64,7 @@ export const ProxyPage: React.FC = () => {
 
     // Subtle, organic parallax displacement of the purple sphere
     const offsetX = (normX * 36).toFixed(1);
-    const offsetY = (normY * 28).toFixed(1);
+    const offsetY = (normY * 24).toFixed(1);
 
     pageRef.current.style.setProperty("--sphere-x", `${offsetX}px`);
     pageRef.current.style.setProperty("--sphere-y", `${offsetY}px`);
@@ -106,11 +106,11 @@ export const ProxyPage: React.FC = () => {
       onMouseLeave={handleMouseLeave}
       aria-label="Proxy Manager Dashboard"
     >
+      {/* Decorative Purple Radial Gradient Sphere - Anchored to proxy window, behind internal cards */}
+      <div className="proxy-purple-ellipse" aria-hidden="true" />
+
       {/* Isolated Vertical Scroll Container */}
       <div className="proxy-scroll-container">
-        {/* Decorative Purple Radial Gradient Ellipse */}
-        <div className="proxy-purple-ellipse" aria-hidden="true" />
-
         {/* Section 1: Initial Viewport Frame (Exact 1136x555 geometries) */}
         <div className="proxy-initial-viewport">
           {/* Header */}

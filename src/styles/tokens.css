@@ -51,7 +51,7 @@
   --nexus-radius-search: 60px;
 
   /* Typography Scale */
-  --nexus-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Geist", "Comic Sans MS", sans-serif;
+  --nexus-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Geist", sans-serif;
   --nexus-font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
 
   --nexus-font-title: 500 40px/1.15 var(--nexus-font-family);

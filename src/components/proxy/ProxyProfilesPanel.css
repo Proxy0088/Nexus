@@ -9,7 +9,7 @@
 .proxy-profiles-inner {
   width: 100%;
   height: 100%;
-  padding: 31px 43px 36px 43px;
+  padding: 28px 36px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -19,41 +19,42 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .proxy-profiles-title {
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 32px;
-  font-weight: 400;
-  line-height: 40px;
-  color: #DADADA;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 32px;
+  color: #EDEDED;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
 .proxy-add-button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 18px;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.20);
-  color: #DADADA;
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #EDEDED;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  /* Rule 1 & 15: Ease-out with 160ms entrance, 128ms exit */
-  transition: transform 128ms cubic-bezier(0.16, 1, 0.3, 1),
-              background 160ms cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* Rule 1 & 15: Ease-out entrance, 20% faster exit */
+  transition: transform 112ms cubic-bezier(0.16, 1, 0.3, 1),
+              background 140ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 140ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 
 .proxy-add-button:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.24);
   transform: translateY(-1px);
 }
 
@@ -66,15 +67,14 @@
 .proxy-profiles-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
-/* Active Profile Item (matches exact Figma reference geometry) */
 /* Rule 1 & 3: Stagger list rows by 30ms with smooth ease-out */
 @keyframes nexusRowEnter {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -87,39 +87,46 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 8px 12px 8px 0;
+  padding: 10px 16px;
   box-sizing: border-box;
-  border-radius: 28px;
-  transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
-  animation: nexusRowEnter 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  border-radius: 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background-color 140ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 140ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: nexusRowEnter 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: calc(var(--row-index, 0) * 30ms);
 }
 
 .proxy-profile-item.is-active {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .proxy-profile-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .proxy-profile-left {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 16px;
 }
 
+/* Unslopped Quiet Graphite Icon Box */
 .proxy-profile-icon-box {
-  width: 72px;
-  height: 72px;
-  border-radius: 28px;
-  background: rgba(191, 191, 192, 0.51);
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.35);
-  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.12);
+  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .proxy-profile-item:hover .proxy-profile-icon-box {
@@ -127,7 +134,8 @@
 }
 
 .proxy-profile-icon-svg {
-  color: #FFFFFF;
+  color: #EDEDED;
+  opacity: 0.85;
 }
 
 .proxy-profile-details {
@@ -137,37 +145,38 @@
 }
 
 .proxy-profile-name {
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 30px;
-  color: #DADADA;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #EDEDED;
   margin: 0;
   letter-spacing: -0.01em;
 }
 
 .proxy-profile-meta {
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 15px;
-  line-height: 20px;
-  color: #939393;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 13px;
+  line-height: 18px;
+  color: #A1A1A6;
   margin: 0;
+  font-variant-numeric: tabular-nums;
 }
 
-/* Rule 20: Reuse the same layout (stable width so no layout shifts occur) */
+/* Rule 20: Reuse the same layout */
 .proxy-profile-right {
   display: flex;
   align-items: center;
   gap: 16px;
-  min-width: 150px;
+  min-width: 140px;
   justify-content: flex-end;
 }
 
-/* Rule 6: Stagger as details settle (+25ms after row) */
+/* Rule 6: Stagger as details settle */
 @keyframes nexusDetailSettle {
   from {
     opacity: 0;
-    transform: translateX(6px);
+    transform: translateX(4px);
   }
   to {
     opacity: 1;
@@ -176,33 +185,30 @@
 }
 
 .proxy-profile-latency {
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 30px;
+  font-family: var(--nexus-font-mono, "SF Mono", "JetBrains Mono", Consolas, monospace);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 22px;
   color: #1ED53B;
   letter-spacing: -0.01em;
-  animation: nexusDetailSettle 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  font-variant-numeric: tabular-nums;
+  animation: nexusDetailSettle 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: calc(var(--row-index, 0) * 30ms + 25ms);
 }
 
-/* Rule 8: Pulse to confirm success (when active checkmark appears)
-   Rule 18: Crossfade icons + subtle blur */
+/* Rule 8: Pulse to confirm success (when active checkmark appears) */
 @keyframes nexusConfirmPulse {
   0% {
     transform: scale(0.92);
     opacity: 0.6;
-    filter: blur(1.5px);
   }
   50% {
-    transform: scale(1.08);
+    transform: scale(1.06);
     opacity: 1;
-    filter: blur(0px);
   }
   100% {
     transform: scale(1);
     opacity: 1;
-    filter: blur(0px);
   }
 }
 
@@ -210,10 +216,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   color: #1ED53B;
-  animation: nexusConfirmPulse 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: nexusConfirmPulse 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .proxy-profile-actions {
@@ -223,22 +229,25 @@
 }
 
 .proxy-profile-select-btn {
-  padding: 6px 14px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #DADADA;
-  font-family: "Comic Sans MS", sans-serif;
-  font-size: 13px;
+  padding: 5px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #EDEDED;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  /* Rule 15: Exits 20% shorter (112ms exit vs 140ms enter) */
+  /* Rule 15: Exits 20% shorter */
   transition: transform 112ms cubic-bezier(0.16, 1, 0.3, 1),
-              background 140ms cubic-bezier(0.16, 1, 0.3, 1);
+              background 140ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 140ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 
 .proxy-profile-select-btn:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 /* Rule 4: Scale to 0.97 on press */

@@ -18,7 +18,7 @@ export const tokens = {
   },
   typography: {
     fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Geist", "Comic Sans MS", sans-serif',
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Geist", sans-serif',
     fontMono: '"JetBrains Mono", "SF Mono", Menlo, Consolas, monospace',
     title: {
       fontSize: "40px",

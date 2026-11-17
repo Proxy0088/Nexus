@@ -105,7 +105,7 @@ export const ProxyProfilesPanel: React.FC<ProxyProfilesPanelProps> = ({
               >
                 <div className="proxy-profile-left">
                   <div className="proxy-profile-icon-box" aria-hidden="true">
-                    <RouterIcon size={38} className="proxy-profile-icon-svg" />
+                    <RouterIcon size={28} className="proxy-profile-icon-svg" />
                   </div>
 
                   <div className="proxy-profile-details">
@@ -121,7 +121,7 @@ export const ProxyProfilesPanel: React.FC<ProxyProfilesPanelProps> = ({
 
                   {isActive ? (
                     <div className="proxy-profile-check" title="Active Connection">
-                      <CheckCircleIcon size={36} color="#1ED53B" />
+                      <CheckCircleIcon size={28} color="#1ED53B" />
                     </div>
                   ) : (
                     <div className="proxy-profile-actions">

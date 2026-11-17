@@ -9,7 +9,7 @@
 }
 
 .proxy-extended-inner {
-  padding: 31px 43px 36px 43px;
+  padding: 28px 36px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -17,20 +17,20 @@
 }
 
 .proxy-section-title {
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 28px;
-  font-weight: 400;
-  line-height: 36px;
-  color: #DADADA;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 30px;
+  color: #EDEDED;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
 .proxy-section-desc {
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-  color: #939393;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 13px;
+  line-height: 18px;
+  color: #A1A1A6;
   margin: 6px 0 0 0;
 }
 
@@ -52,58 +52,62 @@
 }
 
 .proxy-form-label {
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 14px;
-  color: #939393;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: #A1A1A6;
 }
 
 .proxy-input-field {
   width: 100%;
-  height: 44px;
-  padding: 10px 16px;
+  height: 42px;
+  padding: 10px 14px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 14px;
-  color: #DADADA;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #EDEDED;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 13px;
   outline: none;
   box-sizing: border-box;
-  transition: all 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: border-color 140ms cubic-bezier(0.16, 1, 0.3, 1),
+              background 140ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .proxy-input-field:focus {
-  border-color: rgba(255, 255, 255, 0.40);
+  border-color: rgba(255, 255, 255, 0.35);
   background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
 }
 
 .proxy-protocol-segmented {
   display: flex;
-  gap: 8px;
-  background: rgba(0, 0, 0, 0.25);
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.30);
   padding: 4px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 /* Rule 2 & 15: Dropdowns / segmented controls at 150-250ms with 20% faster exit */
 .proxy-protocol-tab {
   flex: 1;
-  height: 36px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 10px;
   border: none;
   background: transparent;
-  color: #939393;
-  font-family: "Comic Sans MS", sans-serif;
-  font-size: 14px;
+  color: #A1A1A6;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1),
-              background 180ms cubic-bezier(0.16, 1, 0.3, 1),
-              color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 112ms cubic-bezier(0.16, 1, 0.3, 1),
+              background 150ms cubic-bezier(0.16, 1, 0.3, 1),
+              color 150ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 
@@ -127,43 +131,44 @@
 }
 
 .proxy-protocol-tab.is-selected {
-  background: rgba(255, 255, 255, 0.14);
-  color: #DADADA;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-  animation: nexusKnobStretch 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.12);
+  color: #EDEDED;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  animation: nexusKnobStretch 180ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .proxy-form-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 14px;
+  gap: 12px;
   margin-top: 8px;
 }
 
 /* Rule 1 & 15: Ease-out entrance, 20% shorter exit */
 .proxy-btn-secondary {
-  height: 42px;
-  padding: 0 20px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #DADADA;
-  font-family: "Comic Sans MS", sans-serif;
-  font-size: 14px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #EDEDED;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: transform 128ms cubic-bezier(0.16, 1, 0.3, 1),
-              background 160ms cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 112ms cubic-bezier(0.16, 1, 0.3, 1),
+              background 140ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 140ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 
 .proxy-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.26);
 }
 
 /* Rule 4: Scale to 0.97 on press */
@@ -187,24 +192,25 @@
 }
 
 .proxy-btn-primary {
-  height: 42px;
-  padding: 0 24px;
-  border-radius: 20px;
-  background: rgba(30, 213, 59, 0.25);
-  border: 1px solid rgba(30, 213, 59, 0.50);
+  height: 38px;
+  padding: 0 20px;
+  border-radius: 12px;
+  background: rgba(30, 213, 59, 0.18);
+  border: 1px solid rgba(30, 213, 59, 0.40);
   color: #1ED53B;
-  font-family: "Comic Sans MS", sans-serif;
-  font-size: 14px;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: transform 128ms cubic-bezier(0.16, 1, 0.3, 1),
-              background 160ms cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 112ms cubic-bezier(0.16, 1, 0.3, 1),
+              background 140ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 140ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 
 .proxy-btn-primary:hover {
-  background: rgba(30, 213, 59, 0.35);
-  border-color: rgba(30, 213, 59, 0.70);
+  background: rgba(30, 213, 59, 0.26);
+  border-color: rgba(30, 213, 59, 0.60);
   transform: translateY(-1px);
 }
 
@@ -218,7 +224,7 @@
 .proxy-routing-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 /* Rule 3: Stagger list rows by 30ms */
@@ -226,12 +232,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 20px;
+  padding: 12px 18px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
   transition: background 140ms ease;
-  animation: nexusRowEnter 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: nexusRowEnter 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: calc(var(--row-index, 0) * 30ms);
 }
 
@@ -242,77 +248,84 @@
 .proxy-routing-app-info {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .proxy-routing-app-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #DADADA;
+  color: #EDEDED;
   transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .proxy-routing-row:hover .proxy-routing-app-icon {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .proxy-routing-app-name {
-  font-family: "Comic Sans MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 18px;
-  color: #DADADA;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 15px;
+  font-weight: 500;
+  color: #EDEDED;
   margin: 0;
 }
 
 .proxy-routing-app-status {
-  font-family: "Comic Sans MS", sans-serif;
-  font-size: 13px;
-  color: #939393;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 12px;
+  color: #A1A1A6;
   margin: 0;
 }
 
 .proxy-routing-controls {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 /* Rule 2: Dropdowns at 150-250ms */
 .proxy-routing-select {
-  height: 38px;
-  padding: 0 14px;
+  height: 34px;
+  padding: 0 12px;
   background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 12px;
-  color: #DADADA;
-  font-family: "Comic Sans MS", sans-serif;
-  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  color: #EDEDED;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 12px;
   outline: none;
   cursor: pointer;
-  transition: border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
-              background 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 150ms cubic-bezier(0.16, 1, 0.3, 1),
+              background 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .proxy-routing-select:hover {
-  border-color: rgba(255, 255, 255, 0.35);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 .proxy-routing-toggle-label {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: "Comic Sans MS", sans-serif;
-  font-size: 13px;
-  color: #939393;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 12px;
+  color: #A1A1A6;
   cursor: pointer;
   user-select: none;
 }
 
 /* Diagnostics Cards Grid */
+.proxy-diagnostics-container {
+  width: 920px;
+  margin: 0 auto;
+}
+
 .proxy-diagnostics-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -323,14 +336,14 @@
 
 /* Rule 3: Stagger cards by 30ms */
 .proxy-diagnostic-card {
-  height: 154px;
+  height: 140px;
   box-sizing: border-box;
-  animation: nexusRowEnter 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: nexusRowEnter 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: calc(var(--card-index, 0) * 30ms);
 }
 
 .proxy-diagnostic-inner {
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -345,27 +358,29 @@
 }
 
 .proxy-diagnostic-title {
-  font-family: "Comic Sans MS", sans-serif;
-  font-size: 14px;
-  color: #939393;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: #A1A1A6;
   margin: 0;
 }
 
 .proxy-diagnostic-icon {
-  color: #DADADA;
+  color: #A1A1A6;
 }
 
 .proxy-diagnostic-value {
-  font-family: "Comic Sans MS", sans-serif;
-  font-size: 24px;
-  font-weight: 400;
-  color: #DADADA;
+  font-family: var(--nexus-font-mono, "SF Mono", "JetBrains Mono", Consolas, monospace);
+  font-size: 20px;
+  font-weight: 500;
+  color: #EDEDED;
   margin: 4px 0 0 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .proxy-diagnostic-status {
-  font-family: "Comic Sans MS", sans-serif;
-  font-size: 13px;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 12px;
   color: #1ED53B;
   display: flex;
   align-items: center;
@@ -373,7 +388,7 @@
 }
 
 .proxy-diagnostic-status.is-muted {
-  color: #939393;
+  color: #73737A;
 }
 
 /* Modal Overlay */
@@ -415,10 +430,10 @@
 }
 
 .proxy-modal-box {
-  width: 580px;
-  border-radius: 36px;
+  width: 540px;
+  border-radius: 28px;
   box-shadow: 0 32px 72px rgba(0, 0, 0, 0.85);
   transform-origin: center center;
-  animation: nexusPopoverEnter 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: nexusPopoverEnter 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: transform, opacity;
 }
