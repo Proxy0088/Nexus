@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { ProxyHeader } from "@/components/proxy/ProxyHeader";
 import { ConnectionStatusCard } from "@/components/proxy/ConnectionStatusCard";
 import { Socks5Card } from "@/components/proxy/Socks5Card";
@@ -52,6 +52,29 @@ export const ProxyPage: React.FC = () => {
   const [profiles, setProfiles] = useState<ProxyProfile[]>(INITIAL_PROFILES);
   const [activeProfileId, setActiveProfileId] = useState("de-main");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const pageRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!pageRef.current) return;
+    const rect = pageRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const normX = Math.max(-1, Math.min(1, (e.clientX - centerX) / (rect.width / 2)));
+    const normY = Math.max(-1, Math.min(1, (e.clientY - centerY) / (rect.height / 2)));
+
+    // Subtle, organic parallax displacement of the purple sphere
+    const offsetX = (normX * 36).toFixed(1);
+    const offsetY = (normY * 28).toFixed(1);
+
+    pageRef.current.style.setProperty("--sphere-x", `${offsetX}px`);
+    pageRef.current.style.setProperty("--sphere-y", `${offsetY}px`);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!pageRef.current) return;
+    pageRef.current.style.setProperty("--sphere-x", "0px");
+    pageRef.current.style.setProperty("--sphere-y", "0px");
+  }, []);
 
   const activeProfile = profiles.find((p) => p.id === activeProfileId) || profiles[0];
 
@@ -76,7 +99,13 @@ export const ProxyPage: React.FC = () => {
   };
 
   return (
-    <div className="proxy-page" aria-label="Proxy Manager Dashboard">
+    <div
+      ref={pageRef}
+      className="proxy-page"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      aria-label="Proxy Manager Dashboard"
+    >
       {/* Isolated Vertical Scroll Container */}
       <div className="proxy-scroll-container">
         {/* Decorative Purple Radial Gradient Ellipse */}

@@ -48,7 +48,7 @@
   background: rgba(255, 255, 255, 0.32);
 }
 
-/* Decorative Purple Radial Gradient Ellipse */
+/* Decorative Purple Radial Gradient Ellipse with Smooth Parallax */
 .proxy-purple-ellipse {
   position: absolute;
   width: 583.48px;
@@ -63,7 +63,9 @@
     #5F33D2 76%,
     #4202E7 100%
   );
-  transform: rotate(62deg);
+  transform: rotate(62deg) translate(var(--sphere-x, 0px), var(--sphere-y, 0px));
+  transition: transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
   pointer-events: none;
   z-index: 1;
   opacity: 0.95;
