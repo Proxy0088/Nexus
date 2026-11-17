@@ -51,10 +51,10 @@
 /* Decorative Purple Radial Gradient Ellipse with Smooth Parallax */
 .proxy-purple-ellipse {
   position: absolute;
-  width: 583.48px;
-  height: 583.48px;
-  left: 700px;
-  top: 260px;
+  width: 500px;
+  height: 500px;
+  left: 740px;
+  top: 280px;
   border-radius: 50%;
   background: radial-gradient(
     circle at 50% 50%,
