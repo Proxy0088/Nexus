@@ -48,13 +48,14 @@
   background: rgba(255, 255, 255, 0.32);
 }
 
-/* Decorative Purple Radial Gradient Ellipse with Smooth Parallax */
+/* Decorative Purple Radial Gradient Ellipse with Smooth Parallax
+   Positioned on the proxy window background, underneath all internal cards */
 .proxy-purple-ellipse {
   position: absolute;
   width: 583.48px;
   height: 583.48px;
-  left: 540px;
-  top: 260px;
+  left: 630px;
+  top: 360px;
   border-radius: 50%;
   background: radial-gradient(
     circle at 50% 50%,

@@ -106,11 +106,11 @@ export const ProxyPage: React.FC = () => {
       onMouseLeave={handleMouseLeave}
       aria-label="Proxy Manager Dashboard"
     >
+      {/* Decorative Purple Radial Gradient Ellipse on Proxy Window, under all inner cards */}
+      <div className="proxy-purple-ellipse" aria-hidden="true" />
+
       {/* Isolated Vertical Scroll Container */}
       <div className="proxy-scroll-container">
-        {/* Decorative Purple Radial Gradient Ellipse */}
-        <div className="proxy-purple-ellipse" aria-hidden="true" />
-
         {/* Section 1: Initial Viewport Frame (Exact 1136x555 geometries) */}
         <div className="proxy-initial-viewport">
           {/* Header */}
