@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { CloseIcon } from "../icons";
 import { ProxyProfile } from "./ProxyProfilesPanel";
 import "./ProxyExtendedSections.css";
@@ -26,13 +27,17 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
   }, [onClose]);
 
   useEffect(() => {
+    document.body.style.overflow = "hidden";
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         handleClose();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [handleClose]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -42,7 +47,7 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
     handleClose();
   };
 
-  return (
+  return createPortal(
     <div
       className={`proxy-modal-backdrop ${isClosing ? "is-closing" : ""}`}
       onClick={handleClose}
@@ -155,6 +160,7 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

@@ -8,7 +8,6 @@ import {
   ProjectIcon,
   ToolsIcon,
 } from "../icons";
-import backgroundImage from "@/assets/background.png";
 import "./BottomNav.css";
 
 export type NavTabId = "tools" | "project" | "network" | "proxy" | "apps" | "home";
@@ -154,52 +153,19 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     if (!ctx) return;
 
     let active = true;
-    const img = new Image();
-    img.src = backgroundImage;
 
     const paintNavBackdrop = () => {
       if (!active || !navRootRef.current) return;
-      const navRect = navRootRef.current.getBoundingClientRect();
       const w = canvas.width;
       const h = canvas.height;
 
-      ctx.fillStyle = "#111b19";
+      // Pure dark atmosphere matching .nexus-bg-layer
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, "#0f1c18");
+      grad.addColorStop(0.5, "#0a110f");
+      grad.addColorStop(1, "#050807");
+      ctx.fillStyle = grad;
       ctx.fillRect(0, 0, w, h);
-
-      if (!img.complete || img.naturalWidth === 0 || navRect.width <= 0 || navRect.height <= 0) {
-        return;
-      }
-
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const imgRatio = img.naturalWidth / img.naturalHeight;
-      const viewRatio = vw / vh;
-
-      let drawW: number;
-      let drawH: number;
-      if (viewRatio > imgRatio) {
-        drawW = vw;
-        drawH = vw / imgRatio;
-      } else {
-        drawH = vh;
-        drawW = vh * imgRatio;
-      }
-
-      const bgOffsetX = (vw - drawW) / 2;
-      const bgOffsetY = (vh - drawH) / 2;
-      const scaleX = w / navRect.width;
-      const scaleY = h / navRect.height;
-
-      ctx.save();
-      ctx.filter = "blur(10px) saturate(135%)";
-      ctx.drawImage(
-        img,
-        (bgOffsetX - navRect.left) * scaleX,
-        (bgOffsetY - navRect.top) * scaleY,
-        drawW * scaleX,
-        drawH * scaleY
-      );
-      ctx.restore();
 
       // Match frosted translucent sheen of .nexus-main-frame + .nexus-bottom-nav-container
       ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
@@ -209,7 +175,6 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     };
 
     paintNavBackdrop();
-    img.onload = paintNavBackdrop;
 
     const handleResize = () => {
       updateIndicator();

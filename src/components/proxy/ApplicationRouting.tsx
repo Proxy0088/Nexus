@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { ProxyGlassCard } from "./ProxyGlassCard";
 import {
   SearchIcon,
@@ -234,13 +235,12 @@ const GlassSwitch: React.FC<GlassSwitchProps> = ({ checked, onChange, ariaLabel 
   );
 };
 
-/* Custom Glass Route Selector Dropdown */
+/* Custom Glass Route Selector Dropdown with Body Portal Positioning */
 interface RouteSelectorProps {
   currentProfileId: string;
   onSelectProfile: (id: string) => void;
   appName: string;
   isOpen: boolean;
-  isDropup?: boolean;
   onToggle: () => void;
   onClose: () => void;
 }
@@ -250,17 +250,33 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
   onSelectProfile,
   appName,
   isOpen,
-  isDropup = false,
   onToggle,
   onClose,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = useState<{ top: number; left: number; isDropup: boolean } | null>(null);
   const [isClosing, setIsClosing] = useState(false);
   const closeTimerRef = useRef<number | null>(null);
 
   const activeProfile =
     AVAILABLE_PROFILES.find((p) => p.id === currentProfileId) ||
     AVAILABLE_PROFILES[0];
+
+  const updateCoordinates = useCallback(() => {
+    if (!btnRef.current) return;
+    const rect = btnRef.current.getBoundingClientRect();
+    const menuWidth = 290;
+    const menuHeight = 245;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+
+    const isDropup = spaceBelow < menuHeight + 16 && spaceAbove > spaceBelow;
+    const top = isDropup ? Math.max(12, rect.top - menuHeight - 8) : rect.bottom + 8;
+    const left = Math.max(12, Math.min(window.innerWidth - menuWidth - 12, rect.right - menuWidth));
+
+    setCoords({ top, left, isDropup });
+  }, []);
 
   const handleGracefulClose = useCallback(() => {
     if (isClosing) return;
@@ -278,8 +294,27 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
   }, []);
 
   useEffect(() => {
+    if (isOpen) {
+      updateCoordinates();
+      const handleScrollOrResize = () => {
+        updateCoordinates();
+      };
+      window.addEventListener("scroll", handleScrollOrResize, true);
+      window.addEventListener("resize", handleScrollOrResize);
+      return () => {
+        window.removeEventListener("scroll", handleScrollOrResize, true);
+        window.removeEventListener("resize", handleScrollOrResize);
+      };
+    }
+  }, [isOpen, updateCoordinates]);
+
+  useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (
+        btnRef.current && !btnRef.current.contains(target) &&
+        menuRef.current && !menuRef.current.contains(target)
+      ) {
         handleGracefulClose();
       }
     };
@@ -315,11 +350,9 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
   const shouldRenderMenu = isOpen || isClosing;
 
   return (
-    <div
-      className={`proxy-route-selector-container ${shouldRenderMenu ? "is-active-container" : ""}`}
-      ref={containerRef}
-    >
+    <div className="proxy-route-selector-container">
       <button
+        ref={btnRef}
         type="button"
         className={`proxy-route-pill-btn ${isOpen ? "is-open" : ""}`}
         onClick={handleToggleClick}
@@ -338,10 +371,15 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
         </span>
       </button>
 
-      {shouldRenderMenu && (
+      {shouldRenderMenu && coords && createPortal(
         <div
-          className={`proxy-route-dropdown-menu ${isDropup ? "is-dropup" : ""} ${isClosing ? "is-closing" : ""}`}
+          ref={menuRef}
+          className={`proxy-route-dropdown-menu ${coords.isDropup ? "is-dropup" : ""} ${isClosing ? "is-closing" : ""}`}
           role="menu"
+          style={{
+            top: `${coords.top}px`,
+            left: `${coords.left}px`,
+          }}
         >
           <div className="proxy-route-specular-top" aria-hidden="true" />
           <div className="proxy-route-menu-header">Select Proxy Endpoint</div>
@@ -377,7 +415,8 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
               </button>
             );
           })}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
@@ -401,14 +440,30 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
     setIsAddModalOpen(true);
   };
 
-  const handleCloseAddModal = () => {
+  const handleCloseAddModal = useCallback(() => {
     if (isAddModalClosing) return;
     setIsAddModalClosing(true);
     setTimeout(() => {
       setIsAddModalClosing(false);
       setIsAddModalOpen(false);
     }, 210);
-  };
+  }, [isAddModalClosing]);
+
+  useEffect(() => {
+    if (isAddModalOpen) {
+      document.body.style.overflow = "hidden";
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          handleCloseAddModal();
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.body.style.overflow = "";
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [isAddModalOpen, handleCloseAddModal]);
 
   const handleProfileChange = (appId: string, profileId: string) => {
     setRules((prev) =>
@@ -632,7 +687,6 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
                         }}
                         appName={rule.appName}
                         isOpen={isDropdownOpen}
-                        isDropup={index >= 2}
                         onToggle={() =>
                           setOpenDropdownAppId(isDropdownOpen ? null : rule.appId)
                         }
@@ -667,8 +721,8 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
         </div>
       </div>
 
-      {/* Add App Modal */}
-      {(isAddModalOpen || isAddModalClosing) && (
+      {/* Add App Modal — Full Screen Locked via React Portal */}
+      {(isAddModalOpen || isAddModalClosing) && createPortal(
         <div
           className={`proxy-modal-backdrop ${isAddModalClosing ? "is-closing" : ""}`}
           onClick={handleCloseAddModal}
@@ -681,8 +735,9 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
             aria-labelledby="add-app-title"
           >
             <div className="proxy-modal-specular-top" aria-hidden="true" />
+            <div className="proxy-modal-gleam" aria-hidden="true" />
             <div className="proxy-modal-inner">
-              <div className="proxy-modal-header">
+              <div className="proxy-modal-header proxy-modal-stagger-1">
                 <div>
                   <h2 id="add-app-title" className="proxy-modal-title">
                     Add Application Route
@@ -702,7 +757,7 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
               </div>
 
               {/* Presets Grid */}
-              <div className="proxy-preset-apps-section">
+              <div className="proxy-preset-apps-section proxy-modal-stagger-2">
                 <span className="proxy-form-label">Popular Developer Tools</span>
                 <div className="proxy-preset-grid">
                   {PRESET_NEW_APPS.filter(
@@ -726,7 +781,7 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
               </div>
 
               {/* Custom Process Input */}
-              <form onSubmit={handleAddCustomApp} className="proxy-custom-app-form">
+              <form onSubmit={handleAddCustomApp} className="proxy-custom-app-form proxy-modal-stagger-3">
                 <label className="proxy-form-label" htmlFor="custom-app-input">
                   Or Add Custom App / Process Name
                 </label>
@@ -750,7 +805,8 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
               </form>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </ProxyGlassCard>
   );

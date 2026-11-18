@@ -5,7 +5,6 @@ import { LiquidGlassPanel } from "@/components/glass/LiquidGlassPanel";
 import { LiquidGlassScene } from "@/components/glass/LiquidGlassScene";
 import { ProxyPage } from "@/pages/Proxy";
 import { AmbientParticlesBackground } from "@/components/background/AmbientParticlesBackground";
-import backgroundImage from "@/assets/background.png";
 import "./HomePage.css";
 
 export const HomePage: React.FC = () => {
@@ -60,11 +59,7 @@ export const HomePage: React.FC = () => {
   return (
     <LiquidGlassScene className="nexus-app-root">
       {/* Background layer with Ambient Particle Atmosphere (Figma node 2:6 / 12) */}
-      <div
-        className="nexus-bg-layer"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-        aria-hidden="true"
-      >
+      <div className="nexus-bg-layer" aria-hidden="true">
         <AmbientParticlesBackground />
       </div>
 
