@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CloseIcon } from "../icons";
 import { ProxyProfile } from "./ProxyProfilesPanel";
+import { ModalLiquidGlassOverlay } from "@/components/glass/ModalLiquidGlassOverlay";
 import "./ProxyExtendedSections.css";
 
 export interface AddProxyModalProps {
@@ -30,6 +31,15 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
         aria-modal="true"
         aria-labelledby="modal-title"
       >
+        {/* Real WebGL Optical Liquid Glass Bevel, Specular Glints & Chromatic Aberration (@ybouane/liquidglass) */}
+        <ModalLiquidGlassOverlay
+          cornerRadius={28}
+          zRadius={24}
+          refraction={0.75}
+          dispersion={0.7}
+          specular={0.38}
+          edgeHighlight={0.52}
+        />
         <div className="proxy-modal-specular-top" aria-hidden="true" />
         <form onSubmit={handleSubmit} className="proxy-modal-inner">
           <div className="proxy-modal-header">
