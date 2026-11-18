@@ -14,10 +14,19 @@ html, body {
   background-color: var(--nexus-color-bg-root);
   color: var(--nexus-color-text-secondary);
   font-family: var(--nexus-font-family);
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
   user-select: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {

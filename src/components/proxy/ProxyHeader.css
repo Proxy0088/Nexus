@@ -23,7 +23,7 @@
   line-height: 40px;
   color: var(--nexus-color-text-primary, #ededed);
   margin: 0;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--nexus-tracking-title, -0.018em);
 }
 
 .proxy-header-subtitle {
@@ -33,6 +33,7 @@
   line-height: 20px;
   color: var(--nexus-color-text-secondary, #a1a1a6);
   margin: 0;
+  letter-spacing: var(--nexus-tracking-body, 0em);
 }
 
 .proxy-header-badge {
@@ -48,6 +49,7 @@
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  letter-spacing: var(--nexus-tracking-caption, 0.012em);
   transition: transform 128ms cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
