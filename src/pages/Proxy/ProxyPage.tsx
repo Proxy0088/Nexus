@@ -7,6 +7,7 @@ import { ProxyConfiguration } from "@/components/proxy/ProxyConfiguration";
 import { ApplicationRouting } from "@/components/proxy/ApplicationRouting";
 import { ConnectionDiagnostics } from "@/components/proxy/ConnectionDiagnostics";
 import { AddProxyModal } from "@/components/proxy/AddProxyModal";
+import { EmeraldSphere3D } from "@/components/proxy/EmeraldSphere3D";
 import "./ProxyPage.css";
 
 const INITIAL_PROFILES: ProxyProfile[] = [
@@ -56,8 +57,9 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
   const [profiles, setProfiles] = useState<ProxyProfile[]>(INITIAL_PROFILES);
   const [activeProfileId, setActiveProfileId] = useState("de-main");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [sphereMouse, setSphereMouse] = useState({ x: 0, y: 0 });
+  const [sphereOffset, setSphereOffset] = useState({ x: 0, y: 0 });
   const pageRef = useRef<HTMLDivElement>(null);
-  const sphereRef = useRef<HTMLDivElement>(null);
   const rectCacheRef = useRef<DOMRect | null>(null);
   const mouseRafRef = useRef<number | null>(null);
   const pendingPointerRef = useRef({ x: 0, y: 0 });
@@ -81,14 +83,14 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (isExiting || !sphereRef.current) return;
+      if (isExiting) return;
       pendingPointerRef.current.x = e.clientX;
       pendingPointerRef.current.y = e.clientY;
 
       if (mouseRafRef.current) return;
       mouseRafRef.current = requestAnimationFrame(() => {
         mouseRafRef.current = null;
-        if (!sphereRef.current || !pageRef.current) return;
+        if (!pageRef.current) return;
 
         const rect = rectCacheRef.current ?? pageRef.current.getBoundingClientRect();
         rectCacheRef.current = rect;
@@ -98,14 +100,12 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
         const normX = Math.max(-1, Math.min(1, (pendingPointerRef.current.x - centerX) / (rect.width / 2)));
         const normY = Math.max(-1, Math.min(1, (pendingPointerRef.current.y - centerY) / (rect.height / 2)));
 
-        // Subtle, small organic mouse parallax (±12px X, ±8px Y) — GPU transform only, zero card reflow
-        const offsetX = (normX * 12).toFixed(1);
-        const offsetY = (normY * 8).toFixed(1);
-        const lightX = (31.8 + normX * 6).toFixed(1);
-        const lightY = (27.3 + normY * 5).toFixed(1);
+        // Noticeable, fluid spring parallax (±36px X, ±24px Y)
+        const offsetX = Number((normX * 36).toFixed(1));
+        const offsetY = Number((normY * 24).toFixed(1));
 
-        sphereRef.current.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) rotate(60.73deg)`;
-        sphereRef.current.style.setProperty("--sphere-light-pos", `${lightX}% ${lightY}%`);
+        setSphereOffset({ x: offsetX, y: offsetY });
+        setSphereMouse({ x: normX, y: normY });
       });
     },
     [isExiting]
@@ -116,10 +116,8 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
       cancelAnimationFrame(mouseRafRef.current);
       mouseRafRef.current = null;
     }
-    if (sphereRef.current) {
-      sphereRef.current.style.transform = "translate3d(0px, 0px, 0) rotate(60.73deg)";
-      sphereRef.current.style.setProperty("--sphere-light-pos", "31.8% 27.3%");
-    }
+    setSphereOffset({ x: 0, y: 0 });
+    setSphereMouse({ x: 0, y: 0 });
   }, []);
 
   const activeProfile = profiles.find((p) => p.id === activeProfileId) || profiles[0];
@@ -155,8 +153,12 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
     >
       {/* Isolated Vertical Scroll Container */}
       <div className="proxy-scroll-container">
-        {/* Decorative Emerald/Teal 3D Sphere — Anchored cleanly above Proxy Profiles with subtle mouse parallax */}
-        <div ref={sphereRef} className="proxy-purple-ellipse" aria-hidden="true" />
+        {/* Interactive 3D WebGL Emerald Sphere with dynamic lighting, spring parallax, and ambient glow pulse */}
+        <EmeraldSphere3D
+          normX={sphereMouse.x}
+          normY={sphereMouse.y}
+          style={{ transform: `translate3d(${sphereOffset.x}px, ${sphereOffset.y}px, 0)` }}
+        />
 
         {/* Section 1: Initial Viewport Frame */}
         <div className="proxy-initial-viewport">

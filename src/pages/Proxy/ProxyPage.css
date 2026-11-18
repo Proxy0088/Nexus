@@ -100,12 +100,63 @@
   animation-delay: 45ms !important;
 }
 
-.proxy-page.is-exiting .proxy-purple-ellipse {
+.proxy-page.is-exiting .proxy-purple-ellipse,
+.proxy-page.is-exiting .emerald-sphere-3d-wrapper {
   animation: nexusElementExit 150ms cubic-bezier(0.4, 0, 1, 1) forwards !important;
   animation-delay: 15ms !important;
 }
 
-/* Decorative Emerald/Teal 3D Sphere (Figma Ellipse 2 — under Connection Status Card, ON TOP of Proxy Profiles) */
+/* Decorative 3D Emerald Sphere (Figma Ellipse 2 with Dynamic Lighting, Fluid Parallax & Refraction Glow) */
+.emerald-sphere-3d-wrapper {
+  position: absolute;
+  width: 270px;
+  height: 270px;
+  left: -35px;
+  top: 177px;
+  pointer-events: none;
+  z-index: 2;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  animation: nexusSphereFloatIn 550ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 40ms;
+}
+
+.emerald-sphere-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.35));
+}
+
+/* Ambient Backlight Pulse (casts emerald luminescence through glass cards above) */
+.emerald-sphere-ambient-glow {
+  position: absolute;
+  inset: -15px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(15, 178, 148, 0.50) 0%,
+    rgba(0, 117, 103, 0.30) 45%,
+    transparent 72%
+  );
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: -1;
+  animation: nexusGlowBreath 3.6s ease-in-out infinite alternate;
+}
+
+@keyframes nexusGlowBreath {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1.12);
+    opacity: 0.95;
+  }
+}
+
 .proxy-purple-ellipse {
   position: absolute;
   width: 240px;
