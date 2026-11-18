@@ -220,104 +220,663 @@
   transition-duration: 70ms;
 }
 
-/* Application Routing Styles */
+/* Application Routing Styles (ui-ux-pro-max High Craft Standards) */
+.proxy-routing-header-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.proxy-routing-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.proxy-routing-active-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #34D399;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+
+.proxy-routing-pulsing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+  animation: nexusLivePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes nexusLivePulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+
+.proxy-routing-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 15px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  color: #34D399;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 140ms ease;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.15);
+}
+
+.proxy-routing-add-btn:hover {
+  background: rgba(16, 185, 129, 0.24);
+  border-color: rgba(52, 211, 153, 0.55);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.30);
+}
+
+.proxy-routing-add-btn:active {
+  transform: scale(0.97);
+}
+
+/* Toolbar: Search & Filter Tabs */
+.proxy-routing-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 12px;
+}
+
+.proxy-routing-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 250px;
+  height: 36px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.proxy-routing-search-box:focus-within {
+  border-color: rgba(52, 211, 153, 0.45);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.proxy-routing-search-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 12.5px;
+}
+
+.proxy-routing-search-input::placeholder {
+  color: #71717A;
+}
+
+.proxy-search-clear-btn {
+  background: transparent;
+  border: none;
+  color: #A1A1A6;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.proxy-routing-filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 3px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.proxy-filter-tab {
+  background: transparent;
+  border: none;
+  color: #A1A1A6;
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.proxy-filter-tab:hover {
+  color: #FFFFFF;
+}
+
+.proxy-filter-tab.is-active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.proxy-filter-count {
+  font-size: 10.5px;
+  opacity: 0.75;
+  margin-left: 3px;
+}
+
+.proxy-routing-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: #71717A;
+  font-size: 13px;
+}
+
+/* Applications List */
 .proxy-routing-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Rule 3: Stagger list rows by 30ms */
 .proxy-routing-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 18px;
+  min-height: 64px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 14px;
-  transition: background 140ms ease;
+  border-radius: 16px;
+  box-sizing: border-box;
+  transition: background 160ms ease, border-color 160ms ease;
   animation: nexusRowEnter 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: calc(var(--row-index, 0) * 30ms);
 }
 
 .proxy-routing-row:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.proxy-routing-row.is-direct-row {
+  background: rgba(255, 255, 255, 0.015);
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 .proxy-routing-app-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
-.proxy-routing-app-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+/* App Brand Vector Badges */
+.proxy-app-brand-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #EDEDED;
-  transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.16), 0 2px 6px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+  transition: transform 140ms ease;
 }
 
-.proxy-routing-row:hover .proxy-routing-app-icon {
-  transform: scale(1.04);
+.proxy-routing-row:hover .proxy-app-brand-badge {
+  transform: scale(1.05);
+}
+
+.brand-antigravity {
+  background: radial-gradient(circle at 35% 35%, rgba(16, 185, 129, 0.25) 0%, rgba(6, 78, 59, 0.5) 100%);
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.brand-vscode {
+  background: radial-gradient(circle at 35% 35%, rgba(0, 122, 204, 0.30) 0%, rgba(0, 60, 110, 0.55) 100%);
+  border-color: rgba(31, 156, 240, 0.35);
+}
+
+.brand-cursor {
+  background: radial-gradient(circle at 35% 35%, rgba(139, 92, 246, 0.30) 0%, rgba(76, 29, 149, 0.55) 100%);
+  border-color: rgba(167, 139, 250, 0.35);
+}
+
+.brand-claude {
+  background: radial-gradient(circle at 35% 35%, rgba(217, 119, 6, 0.30) 0%, rgba(146, 64, 14, 0.55) 100%);
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.brand-opencode {
+  background: radial-gradient(circle at 35% 35%, rgba(6, 182, 212, 0.30) 0%, rgba(21, 94, 117, 0.55) 100%);
+  border-color: rgba(34, 211, 238, 0.35);
+}
+
+.brand-docker {
+  background: radial-gradient(circle at 35% 35%, rgba(0, 145, 226, 0.30) 0%, rgba(0, 50, 100, 0.55) 100%);
+  border-color: rgba(0, 145, 226, 0.35);
+}
+
+.brand-chrome {
+  background: radial-gradient(circle at 35% 35%, rgba(234, 67, 53, 0.25) 0%, rgba(35, 35, 35, 0.55) 100%);
+  border-color: rgba(234, 67, 53, 0.35);
+}
+
+.brand-git {
+  background: radial-gradient(circle at 35% 35%, rgba(240, 80, 50, 0.30) 0%, rgba(110, 30, 20, 0.55) 100%);
+  border-color: rgba(240, 80, 50, 0.35);
+}
+
+.brand-postman {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 108, 55, 0.30) 0%, rgba(130, 50, 20, 0.55) 100%);
+  border-color: rgba(255, 108, 55, 0.35);
+}
+
+.brand-generic {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.proxy-routing-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.proxy-routing-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .proxy-routing-app-name {
   font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   color: #EDEDED;
   margin: 0;
 }
 
-.proxy-routing-app-status {
-  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
-  font-size: 12px;
+.proxy-routing-category-tag {
+  font-size: 10px;
+  font-weight: 500;
   color: #A1A1A6;
-  margin: 0;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1.5px 7px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.proxy-routing-status-line {
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.proxy-status-routed {
+  color: #34D399;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.proxy-status-routed-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 6px #10B981;
+}
+
+.proxy-status-direct {
+  color: #9CA3AF;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.proxy-status-direct-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6B7280;
+}
+
+/* Controls */
 .proxy-routing-controls {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* Rule 2: Dropdowns at 150-250ms */
-.proxy-routing-select {
-  height: 34px;
+/* Custom Route Dropdown Pill */
+.proxy-route-selector-container {
+  position: relative;
+}
+
+.proxy-route-pill-btn {
+  height: 36px;
   padding: 0 12px;
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 10px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: #EDEDED;
   font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
   font-size: 12px;
-  outline: none;
   cursor: pointer;
-  transition: border-color 150ms cubic-bezier(0.16, 1, 0.3, 1),
-              background 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  transition: all 140ms ease;
 }
 
-.proxy-routing-select:hover {
-  border-color: rgba(255, 255, 255, 0.28);
+.proxy-route-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
-.proxy-routing-toggle-label {
+.proxy-route-pill-btn.is-open {
+  border-color: #10B981;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.30);
+}
+
+.proxy-route-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.proxy-route-name {
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+.proxy-route-protocol {
+  font-size: 10px;
+  font-weight: 600;
+  color: #9CA3AF;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1.5px 5px;
+  border-radius: 4px;
+}
+
+.proxy-route-latency {
+  font-size: 11px;
+  color: #A1A1A6;
+  font-family: monospace;
+}
+
+.proxy-route-chevron {
+  display: flex;
+  align-items: center;
+  color: #A1A1A6;
+  transition: transform 140ms ease;
+}
+
+.proxy-route-pill-btn.is-open .proxy-route-chevron {
+  transform: rotate(180deg);
+}
+
+/* Floating Glass Dropdown Menu */
+.proxy-route-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 270px;
+  background: rgba(20, 28, 24, 0.94);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  padding: 6px;
+  z-index: 50;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0, 0, 0, 0.4);
+  animation: nexusPopoverEnter 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.proxy-route-menu-header {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #71717A;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 6px 10px 4px 10px;
+}
+
+.proxy-route-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 120ms ease;
+}
+
+.proxy-route-menu-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.proxy-route-menu-item.is-selected {
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.proxy-route-item-left {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.proxy-route-item-name {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+.proxy-route-item-sub {
+  font-size: 10.5px;
+  color: #9CA3AF;
+}
+
+.proxy-route-item-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.proxy-route-latency-badge {
+  font-size: 11px;
+  color: #34D399;
+  font-family: monospace;
+}
+
+.proxy-route-checkmark {
+  color: #10B981;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* Glass Switch Component */
+.proxy-glass-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  user-select: none;
+}
+
+.proxy-switch-track {
+  width: 44px;
+  height: 25px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  position: relative;
+  transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.proxy-glass-switch.is-routed .proxy-switch-track {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  border-color: rgba(52, 211, 153, 0.45);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+}
+
+.proxy-switch-thumb {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+.proxy-glass-switch.is-routed .proxy-switch-thumb {
+  transform: translateX(19px);
+}
+
+.proxy-switch-status-text {
   font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
   font-size: 12px;
-  color: #A1A1A6;
+  font-weight: 500;
+  min-width: 44px;
+  text-align: left;
+}
+
+.proxy-glass-switch.is-routed .proxy-switch-status-text {
+  color: #34D399;
+}
+
+.proxy-glass-switch.is-direct .proxy-switch-status-text {
+  color: #71717A;
+}
+
+.proxy-routing-delete-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: transparent;
+  border: none;
+  color: #71717A;
   cursor: pointer;
-  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 140ms ease;
+}
+
+.proxy-routing-delete-btn:hover {
+  color: #EF4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Add App Dialog Specifics */
+.proxy-add-app-dialog {
+  max-width: 580px;
+}
+
+.proxy-preset-apps-section {
+  margin: 16px 0 20px 0;
+}
+
+.proxy-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.proxy-preset-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 140ms ease;
+  text-align: left;
+  color: #FFFFFF;
+}
+
+.proxy-preset-card:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(52, 211, 153, 0.4);
+  transform: translateY(-1px);
+}
+
+.proxy-preset-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.proxy-preset-name {
+  font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: #EDEDED;
+}
+
+.proxy-preset-cat {
+  font-size: 11px;
+  color: #A1A1A6;
+}
+
+.proxy-preset-add-icon {
+  margin-left: auto;
+  font-size: 18px;
+  color: #34D399;
+  font-weight: bold;
+}
+
+.proxy-custom-app-form {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 16px;
+}
+
+.proxy-custom-input-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
 }
 
 /* Diagnostics Cards Grid */
