@@ -66,15 +66,17 @@
   }
 }
 
-/* Reverse Staggered Exit Animation — Pure GPU Compositor (Zero Blur Filter) */
+/* Reverse Staggered Exit Animation — Blur-Masked Crossfade (Emil Kowalski §7) */
 @keyframes nexusElementExit {
   0% {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+    filter: blur(0px);
   }
   100% {
     opacity: 0;
     transform: translate3d(0, -8px, 0);
+    filter: blur(2px);
   }
 }
 

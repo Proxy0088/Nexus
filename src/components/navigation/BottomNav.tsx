@@ -46,6 +46,22 @@ const NAVBAR_PILL_CONFIG = {
 
 const NAVBAR_PILL_CONFIG_JSON = JSON.stringify(NAVBAR_PILL_CONFIG);
 
+/**
+ * Apple Designing Fluid Interfaces: Rubber-banding resistance beyond bounds
+ * Resist progressively instead of stopping hard (constant = 0.55)
+ */
+function appleRubberband(overshoot: number, dimension = 140, constant = 0.55): number {
+  return (overshoot * dimension * constant) / (dimension + constant * Math.abs(overshoot));
+}
+
+/**
+ * Apple Designing Fluid Interfaces: Momentum projection based on exponential deceleration
+ * decelerationRate ≈ 0.998 for standard scroll feel; 0.994 for snappier tab flick
+ */
+function appleProjectMomentum(initialVelocity: number /* px/s */, decelerationRate = 0.994): number {
+  return (initialVelocity / 1000) * decelerationRate / (1 - decelerationRate);
+}
+
 export interface BottomNavProps {
   activeTab: NavTabId;
   onTabChange: (tabId: NavTabId) => void;
@@ -76,6 +92,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     minLeft: number;
     maxLeft: number;
     moved: boolean;
+    history: Array<{ x: number; time: number }>;
   }>({
     active: false,
     pointerId: -1,
@@ -85,6 +102,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     minLeft: 0,
     maxLeft: 0,
     moved: false,
+    history: [],
   });
 
   const runSlideGlassLoop = useCallback((durationMs = 330) => {
@@ -284,6 +302,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         minLeft,
         maxLeft,
         moved: false,
+        history: [{ x: e.clientX, time: performance.now() }],
       };
 
       e.currentTarget.setPointerCapture(e.pointerId);
@@ -296,14 +315,28 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     const drag = dragStateRef.current;
     if (!drag.active || e.pointerId !== drag.pointerId || !pillRef.current) return;
 
+    const now = performance.now();
+    drag.history.push({ x: e.clientX, time: now });
+    // Keep last 100ms of history for accurate velocity measurement
+    while (drag.history.length > 2 && now - drag.history[0].time > 100) {
+      drag.history.shift();
+    }
+
     const deltaX = e.clientX - drag.startX;
     if (Math.abs(deltaX) >= 4) {
       drag.moved = true;
     }
 
-    // Clamp cleanly to the navbar track with a subtle 6px elastic cushion at ends
+    // Apply Apple fluid rubber-banding when dragged past bounds
     const rawLeft = drag.startLeft + deltaX;
-    const clampedLeft = Math.max(drag.minLeft - 6, Math.min(drag.maxLeft + 6, rawLeft));
+    let clampedLeft = rawLeft;
+    if (rawLeft < drag.minLeft) {
+      const overshoot = rawLeft - drag.minLeft; // negative value
+      clampedLeft = drag.minLeft + appleRubberband(overshoot, 140, 0.55);
+    } else if (rawLeft > drag.maxLeft) {
+      const overshoot = rawLeft - drag.maxLeft; // positive value
+      clampedLeft = drag.maxLeft + appleRubberband(overshoot, 140, 0.55);
+    }
     drag.currentLeft = clampedLeft;
 
     pillRef.current.style.transform = `translate3d(${clampedLeft.toFixed(1)}px, 0, 0) scale(1.03)`;
@@ -320,8 +353,25 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         e.currentTarget.releasePointerCapture(e.pointerId);
       }
 
-      // Find nearest tab to the released pill center
-      const pillCenter = drag.currentLeft + indicatorWidth / 2;
+      // Calculate release velocity in px/s from pointer history
+      let releaseVelocity = 0;
+      const history = drag.history;
+      if (history.length >= 2) {
+        const oldest = history[0];
+        const newest = history[history.length - 1];
+        const dt = (newest.time - oldest.time) / 1000;
+        if (dt > 0.005) {
+          releaseVelocity = (newest.x - oldest.x) / dt;
+        }
+      }
+
+      // Clamp velocity to reasonable physics range (max ±2200 px/s)
+      const clampedVelocity = Math.max(-2200, Math.min(2200, releaseVelocity));
+      // Project endpoint: only project if gesture carried meaningful flick velocity (>80 px/s)
+      const projectedDistance = Math.abs(clampedVelocity) > 80 ? appleProjectMomentum(clampedVelocity, 0.994) : 0;
+      const projectedLeft = drag.currentLeft + projectedDistance;
+      const pillCenter = projectedLeft + indicatorWidth / 2;
+
       let nearestTab: NavTabId = activeTab;
       let minDist = Infinity;
 

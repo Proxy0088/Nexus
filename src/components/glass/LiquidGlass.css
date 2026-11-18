@@ -11,7 +11,9 @@
     inset 0 -1px 2px 0 rgba(255, 255, 255, 0.08),
     0 12px 28px -4px rgba(0, 0, 0, 0.25);
   overflow: hidden;
-  transition: all var(--nexus-transition-glass);
+  transition: transform 280ms var(--nexus-ease-out),
+              border-color 200ms var(--nexus-ease-out),
+              box-shadow 200ms var(--nexus-ease-out);
 }
 
 /* Remove corner halo specular sheen layer completely as requested */

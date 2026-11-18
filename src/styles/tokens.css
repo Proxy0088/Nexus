@@ -89,3 +89,24 @@
   --nexus-border-specular-top: rgba(255, 255, 255, 0.9);
   --nexus-shadow-glass-depth: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
+
+/* Accessibility: Reduced Motion (Apple Design Guidelines §14 & Emil Kowalski §6) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-delay: 0s !important;
+  }
+  .proxy-stagger-header,
+  .proxy-stagger-card-1,
+  .proxy-stagger-card-2,
+  .proxy-stagger-profiles,
+  .proxy-purple-ellipse,
+  .nexus-nav-item,
+  .nexus-search-container,
+  .nexus-home-page.is-exiting,
+  .proxy-page.is-exiting {
+    animation: none !important;
+    transform: none !important;
+  }
+}
