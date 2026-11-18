@@ -1,0 +1,20 @@
+/* Ambient Section Particles Styles (mengto/skills@ambient-section-particles) */
+
+.nexus-ambient-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.nexus-ambient-particles-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
