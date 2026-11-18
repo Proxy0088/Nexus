@@ -109,13 +109,11 @@
   .proxy-stagger-card-1,
   .proxy-stagger-card-2,
   .proxy-stagger-profiles,
-  .proxy-purple-ellipse,
   .nexus-nav-item,
   .nexus-search-container,
   .nexus-home-page.is-exiting,
   .proxy-page.is-exiting {
     animation: none !important;
-    transform: none !important;
   }
 }
 

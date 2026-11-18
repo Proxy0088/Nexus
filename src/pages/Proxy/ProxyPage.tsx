@@ -60,7 +60,14 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
   const sphereRef = useRef<HTMLDivElement>(null);
   const rectCacheRef = useRef<DOMRect | null>(null);
   const mouseRafRef = useRef<number | null>(null);
+  const resetRafRef = useRef<number | null>(null);
   const pendingPointerRef = useRef({ x: 0, y: 0 });
+  const currentMotionRef = useRef({
+    offsetX: 0,
+    offsetY: 0,
+    lightX: 31.8,
+    lightY: 27.3,
+  });
 
   useEffect(() => {
     const invalidateRect = () => {
@@ -70,6 +77,7 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
     return () => {
       window.removeEventListener("resize", invalidateRect);
       if (mouseRafRef.current) cancelAnimationFrame(mouseRafRef.current);
+      if (resetRafRef.current) cancelAnimationFrame(resetRafRef.current);
     };
   }, []);
 
@@ -85,6 +93,12 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
       pendingPointerRef.current.x = e.clientX;
       pendingPointerRef.current.y = e.clientY;
 
+      // Interruptible motion: cancel any active return animation immediately
+      if (resetRafRef.current) {
+        cancelAnimationFrame(resetRafRef.current);
+        resetRafRef.current = null;
+      }
+
       if (mouseRafRef.current) return;
       mouseRafRef.current = requestAnimationFrame(() => {
         mouseRafRef.current = null;
@@ -98,12 +112,15 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
         const normX = Math.max(-1, Math.min(1, (pendingPointerRef.current.x - centerX) / (rect.width / 2)));
         const normY = Math.max(-1, Math.min(1, (pendingPointerRef.current.y - centerY) / (rect.height / 2)));
 
-        // Subtle, elegant organic parallax & light tracking (no square clipping, purely circular)
-        const offsetX = (normX * 14).toFixed(1);
-        const offsetY = (normY * 10).toFixed(1);
-        const lightX = (31.8 + normX * 6).toFixed(1);
-        const lightY = (27.3 + normY * 5).toFixed(1);
+        // Responsive tracking with natural physical bounds
+        const offsetX = Number((normX * 14).toFixed(2));
+        const offsetY = Number((normY * 10).toFixed(2));
+        const lightX = Number((31.8 + normX * 6).toFixed(2));
+        const lightY = Number((27.3 + normY * 5).toFixed(2));
 
+        currentMotionRef.current = { offsetX, offsetY, lightX, lightY };
+
+        sphereRef.current.style.transition = "transform 140ms cubic-bezier(0.22, 1, 0.36, 1)";
         sphereRef.current.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) rotate(60.73deg)`;
         sphereRef.current.style.setProperty("--sphere-light-pos", `${lightX}% ${lightY}%`);
       });
@@ -116,10 +133,74 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
       cancelAnimationFrame(mouseRafRef.current);
       mouseRafRef.current = null;
     }
-    if (sphereRef.current) {
+    if (resetRafRef.current) {
+      cancelAnimationFrame(resetRafRef.current);
+      resetRafRef.current = null;
+    }
+
+    if (!sphereRef.current) return;
+
+    const startX = currentMotionRef.current.offsetX;
+    const startY = currentMotionRef.current.offsetY;
+    const startLightX = currentMotionRef.current.lightX;
+    const startLightY = currentMotionRef.current.lightY;
+
+    // If already at resting state, no animation needed
+    if (
+      Math.abs(startX) < 0.05 &&
+      Math.abs(startY) < 0.05 &&
+      Math.abs(startLightX - 31.8) < 0.05 &&
+      Math.abs(startLightY - 27.3) < 0.05
+    ) {
       sphereRef.current.style.transform = "translate3d(0px, 0px, 0) rotate(60.73deg)";
       sphereRef.current.style.setProperty("--sphere-light-pos", "31.8% 27.3%");
+      return;
     }
+
+    // Emil Kowalski §2 & §4: Very gentle, critically damped return decay over 1100ms
+    // Strong ease-out: starts immediately with gentle velocity, feathered touchdown
+    const startTime = performance.now();
+    const duration = 1100; // ms — calm, luxurious slow return
+
+    // Disable CSS transition during rAF loop to prevent transition conflicts
+    sphereRef.current.style.transition = "none";
+
+    const animateReturn = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+
+      // Strong ease-out curve equivalent to cubic-bezier(0.16, 1, 0.3, 1)
+      const ease = 1 - Math.pow(1 - progress, 3.8);
+
+      const curX = startX + (0 - startX) * ease;
+      const curY = startY + (0 - startY) * ease;
+      const curLightX = startLightX + (31.8 - startLightX) * ease;
+      const curLightY = startLightY + (27.3 - startLightY) * ease;
+
+      currentMotionRef.current = {
+        offsetX: curX,
+        offsetY: curY,
+        lightX: curLightX,
+        lightY: curLightY,
+      };
+
+      if (sphereRef.current) {
+        sphereRef.current.style.transform = `translate3d(${curX.toFixed(2)}px, ${curY.toFixed(2)}px, 0) rotate(60.73deg)`;
+        sphereRef.current.style.setProperty("--sphere-light-pos", `${curLightX.toFixed(2)}% ${curLightY.toFixed(2)}%`);
+      }
+
+      if (progress < 1) {
+        resetRafRef.current = requestAnimationFrame(animateReturn);
+      } else {
+        resetRafRef.current = null;
+        if (sphereRef.current) {
+          sphereRef.current.style.transform = "translate3d(0px, 0px, 0) rotate(60.73deg)";
+          sphereRef.current.style.setProperty("--sphere-light-pos", "31.8% 27.3%");
+        }
+      }
+    };
+
+    resetRafRef.current = requestAnimationFrame(animateReturn);
   }, []);
 
   const activeProfile = profiles.find((p) => p.id === activeProfileId) || profiles[0];
