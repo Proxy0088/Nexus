@@ -469,8 +469,6 @@
 }
 
 .proxy-modal-inner {
-  position: relative;
-  z-index: 2;
   padding: 30px 34px 28px 34px;
   display: flex;
   flex-direction: column;
