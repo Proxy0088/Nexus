@@ -403,6 +403,7 @@
 }
 
 .proxy-routing-row {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -415,6 +416,13 @@
   transition: background 160ms ease, border-color 160ms ease;
   animation: nexusRowEnter 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: calc(var(--row-index, 0) * 30ms);
+}
+
+.proxy-routing-row.is-dropdown-open {
+  z-index: 250 !important;
+  background: rgba(255, 255, 255, 0.065);
+  border-color: rgba(52, 211, 153, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
 .proxy-routing-row:hover {
@@ -575,16 +583,28 @@
   gap: 12px;
 }
 
-/* Custom Route Dropdown Pill */
+/* Custom Route Dropdown Pill (Matching Draggable Liquid Glass Specifications) */
 .proxy-route-selector-container {
   position: relative;
+  z-index: 100;
+}
+
+.proxy-route-selector-container.is-active-container {
+  z-index: 250;
 }
 
 .proxy-route-pill-btn {
   height: 36px;
-  padding: 0 12px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.60);
+  box-shadow:
+    inset 0 1.2px 2px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 1.5px 0 rgba(255, 255, 255, 0.08),
+    0 4px 14px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
   border-radius: 12px;
   display: inline-flex;
   align-items: center;
@@ -593,18 +613,25 @@
   font-family: var(--nexus-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif);
   font-size: 12px;
   cursor: pointer;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
   transition: all 140ms ease;
 }
 
 .proxy-route-pill-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.32);
+  border-top-color: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 0 1.5px 2.5px 0 rgba(255, 255, 255, 0.6),
+    0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
 .proxy-route-pill-btn.is-open {
-  border-color: #10B981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.30);
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(52, 211, 153, 0.5);
+  border-top-color: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.7),
+    0 0 16px rgba(16, 185, 129, 0.35);
 }
 
 .proxy-route-dot {
@@ -645,21 +672,47 @@
   transform: rotate(180deg);
 }
 
-/* Floating Glass Dropdown Menu */
+/* Floating Glass Dropdown Menu (Authentic Liquid Glass Shader Bevel & Specular) */
 .proxy-route-dropdown-menu {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + 8px);
   right: 0;
-  width: 270px;
-  background: rgba(20, 28, 24, 0.94);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 16px;
-  padding: 6px;
-  z-index: 50;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0, 0, 0, 0.4);
+  width: 290px;
+  border-radius: 20px;
+  background: linear-gradient(
+    145deg,
+    rgba(20, 30, 26, 0.96) 0%,
+    rgba(12, 18, 16, 0.98) 100%
+  );
+  backdrop-filter: blur(40px) saturate(190%) brightness(105%);
+  -webkit-backdrop-filter: blur(40px) saturate(190%) brightness(105%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.70);
+  box-shadow:
+    inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.60),
+    inset 0 -1.5px 2px 0 rgba(255, 255, 255, 0.10),
+    0 28px 60px -8px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(0, 0, 0, 0.50);
+  padding: 8px;
+  z-index: 300;
+  overflow: hidden;
   animation: nexusPopoverEnter 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.proxy-route-specular-top {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.75) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 10;
 }
 
 .proxy-route-menu-header {
@@ -668,7 +721,7 @@
   color: #71717A;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  padding: 6px 10px 4px 10px;
+  padding: 6px 12px 6px 12px;
 }
 
 .proxy-route-menu-item {

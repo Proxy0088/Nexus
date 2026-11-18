@@ -239,14 +239,19 @@ interface RouteSelectorProps {
   currentProfileId: string;
   onSelectProfile: (id: string) => void;
   appName: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
 }
 
 const RouteSelector: React.FC<RouteSelectorProps> = ({
   currentProfileId,
   onSelectProfile,
   appName,
+  isOpen,
+  onToggle,
+  onClose,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const activeProfile =
@@ -256,11 +261,11 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
+        onClose();
       }
     };
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsOpen(false);
+      if (e.key === "Escape") onClose();
     };
 
     if (isOpen) {
@@ -271,7 +276,7 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
       document.removeEventListener("mousedown", handleOutsideClick);
       document.removeEventListener("keydown", handleEsc);
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   const getLatencyColor = (ms: number) => {
     if (ms < 50) return "#10B981"; // Emerald
@@ -280,11 +285,11 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
   };
 
   return (
-    <div className="proxy-route-selector-container" ref={containerRef}>
+    <div className={`proxy-route-selector-container ${isOpen ? "is-active-container" : ""}`} ref={containerRef}>
       <button
         type="button"
         className={`proxy-route-pill-btn ${isOpen ? "is-open" : ""}`}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={onToggle}
         aria-expanded={isOpen}
         aria-label={`Route proxy for ${appName}, currently ${activeProfile.name}`}
       >
@@ -302,6 +307,7 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
 
       {isOpen && (
         <div className="proxy-route-dropdown-menu" role="menu">
+          <div className="proxy-route-specular-top" aria-hidden="true" />
           <div className="proxy-route-menu-header">Select Proxy Endpoint</div>
           {AVAILABLE_PROFILES.map((profile) => {
             const isSelected = profile.id === activeProfile.id;
@@ -313,7 +319,7 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
                 className={`proxy-route-menu-item ${isSelected ? "is-selected" : ""}`}
                 onClick={() => {
                   onSelectProfile(profile.id);
-                  setIsOpen(false);
+                  onClose();
                 }}
               >
                 <div className="proxy-route-item-left">
@@ -351,6 +357,7 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [customAppName, setCustomAppName] = useState("");
+  const [openDropdownAppId, setOpenDropdownAppId] = useState<string | null>(null);
 
   const handleProfileChange = (appId: string, profileId: string) => {
     setRules((prev) =>
@@ -528,12 +535,16 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
               const activeProfile =
                 AVAILABLE_PROFILES.find((p) => p.id === rule.assignedProfileId) ||
                 AVAILABLE_PROFILES[0];
+              const isDropdownOpen = openDropdownAppId === rule.appId;
 
               return (
                 <div
                   key={rule.appId}
-                  className={`proxy-routing-row ${rule.isDirect ? "is-direct-row" : "is-routed-row"}`}
-                  style={{ "--row-index": index } as React.CSSProperties}
+                  className={`proxy-routing-row ${rule.isDirect ? "is-direct-row" : "is-routed-row"} ${isDropdownOpen ? "is-dropdown-open" : ""}`}
+                  style={{
+                    "--row-index": index,
+                    zIndex: isDropdownOpen ? 250 : filteredRules.length - index,
+                  } as React.CSSProperties}
                 >
                   {/* Left: App Brand Badge and Info */}
                   <div className="proxy-routing-app-info">
@@ -564,10 +575,16 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
                     {!rule.isDirect && (
                       <RouteSelector
                         currentProfileId={rule.assignedProfileId}
-                        onSelectProfile={(profileId) =>
-                          handleProfileChange(rule.appId, profileId)
-                        }
+                        onSelectProfile={(profileId) => {
+                          handleProfileChange(rule.appId, profileId);
+                          setOpenDropdownAppId(null);
+                        }}
                         appName={rule.appName}
+                        isOpen={isDropdownOpen}
+                        onToggle={() =>
+                          setOpenDropdownAppId(isDropdownOpen ? null : rule.appId)
+                        }
+                        onClose={() => setOpenDropdownAppId(null)}
                       />
                     )}
 
