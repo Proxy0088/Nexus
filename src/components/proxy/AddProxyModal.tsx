@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { CloseIcon } from "../icons";
 import { ProxyProfile } from "./ProxyProfilesPanel";
 import "./ProxyExtendedSections.css";
@@ -13,18 +13,42 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
   const [protocol, setProtocol] = useState<"SOCKS5" | "HTTPS" | "HTTP">("SOCKS5");
   const [host, setHost] = useState("");
   const [port, setPort] = useState<number>(1080);
+  const [isClosing, setIsClosing] = useState(false);
+  const isClosingRef = useRef(false);
+
+  const handleClose = useCallback(() => {
+    if (isClosingRef.current) return;
+    isClosingRef.current = true;
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 210);
+  }, [onClose]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleClose]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !host) return;
+    if (!name || !host || isClosingRef.current) return;
     onSave({ name, protocol, host, port });
-    onClose();
+    handleClose();
   };
 
   return (
-    <div className="proxy-modal-backdrop" onClick={onClose}>
+    <div
+      className={`proxy-modal-backdrop ${isClosing ? "is-closing" : ""}`}
+      onClick={handleClose}
+    >
       <div
-        className="proxy-modal-box proxy-liquid-glass-modal"
+        className={`proxy-modal-box proxy-liquid-glass-modal ${isClosing ? "is-closing" : ""}`}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -39,7 +63,7 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
             <button
               type="button"
               className="proxy-modal-close-btn"
-              onClick={onClose}
+              onClick={handleClose}
               aria-label="Close dialog"
             >
               <CloseIcon size={18} />
@@ -112,10 +136,19 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
           </div>
 
           <div className="proxy-modal-actions">
-            <button type="button" className="proxy-modal-btn-secondary" onClick={onClose}>
+            <button
+              type="button"
+              className="proxy-modal-btn-secondary"
+              onClick={handleClose}
+              disabled={isClosing}
+            >
               Cancel
             </button>
-            <button type="submit" className="proxy-modal-btn-primary">
+            <button
+              type="submit"
+              className="proxy-modal-btn-primary"
+              disabled={isClosing}
+            >
               Add Profile
             </button>
           </div>
