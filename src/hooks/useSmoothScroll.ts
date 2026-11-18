@@ -60,12 +60,15 @@ export function useSmoothScroll<T extends HTMLElement = HTMLDivElement>(
       if (e.deltaMode === 1) delta *= 28;
       else if (e.deltaMode === 2) delta *= el.clientHeight;
 
-      // If user is at edge and scrolling further into the edge, allow default
-      const isAtTop = el.scrollTop <= 0 && delta < 0;
-      const isAtBottom = el.scrollTop >= maxScroll && delta > 0;
-      if (isAtTop || isAtBottom) {
-        targetY = el.scrollTop;
-        currentY = el.scrollTop;
+      // If user is already at boundary and scrolling further past it, allow natural boundary
+      if (delta < 0 && targetY <= 0) {
+        targetY = 0;
+        currentY = 0;
+        return;
+      }
+      if (delta > 0 && targetY >= maxScroll) {
+        targetY = maxScroll;
+        currentY = maxScroll;
         return;
       }
 
@@ -73,9 +76,9 @@ export function useSmoothScroll<T extends HTMLElement = HTMLDivElement>(
       e.preventDefault();
 
       const {
-        wheelLerp = 0.088,
-        touchpadLerp = 0.26,
-        multiplier = 1.0,
+        wheelLerp = 0.095,
+        touchpadLerp = 0.24,
+        multiplier = 1.25,
       } = optionsRef.current;
 
       // Touchpad vs mouse wheel heuristic:
@@ -91,7 +94,7 @@ export function useSmoothScroll<T extends HTMLElement = HTMLDivElement>(
       if (scrollTimeoutId) clearTimeout(scrollTimeoutId);
       scrollTimeoutId = window.setTimeout(() => {
         el.classList.remove("is-smooth-scrolling");
-      }, 320);
+      }, 340);
 
       // Start momentum loop if not running
       if (!isRunning) {
@@ -105,7 +108,7 @@ export function useSmoothScroll<T extends HTMLElement = HTMLDivElement>(
       const diff = targetY - currentY;
 
       // Snap and stop RAF when settling threshold is reached
-      if (Math.abs(diff) < 0.35) {
+      if (Math.abs(diff) < 0.25) {
         currentY = targetY;
         el.scrollTop = currentY;
         isRunning = false;
@@ -115,7 +118,7 @@ export function useSmoothScroll<T extends HTMLElement = HTMLDivElement>(
 
       // Critically damped spring lerp
       currentY += diff * activeLerp;
-      el.scrollTop = Math.round(currentY * 10) / 10;
+      el.scrollTop = currentY;
 
       rafId = requestAnimationFrame(animate);
     };

@@ -19,7 +19,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
-  scroll-behavior: smooth;
+  scroll-behavior: auto !important; /* Allow JS RAF loop to drive smooth momentum curves at 120fps without browser collision */
   overscroll-behavior-y: contain;
   z-index: 2;
 }
@@ -118,7 +118,7 @@
   width: 240px;
   height: 240px;
   left: -20px;
-  top: 192px;
+  top: calc(192px + var(--sphere-scroll-offset, 0px));
   border-radius: 50%;
   background-color: #007567;
   background-image: radial-gradient(
@@ -217,18 +217,16 @@
   gap: 8px;
 }
 
-/* Staggered Extended Content */
-.proxy-stagger-ext-1 {
-  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
-  animation-delay: 290ms;
+/* Scroll-Triggered Fluid Card Reveal (Apple VisionOS Spring Float-In) */
+.proxy-scroll-reveal {
+  opacity: 0;
+  transform: translate3d(0, 36px, 0) scale(0.982);
+  transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 580ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 
-.proxy-stagger-ext-2 {
-  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
-  animation-delay: 350ms;
-}
-
-.proxy-stagger-ext-3 {
-  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
-  animation-delay: 410ms;
+.proxy-scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
 }

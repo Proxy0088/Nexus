@@ -59,7 +59,7 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
   const sphereRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useSmoothScroll<HTMLDivElement>({ wheelLerp: 0.088 });
+  const scrollContainerRef = useSmoothScroll<HTMLDivElement>({ wheelLerp: 0.095, multiplier: 1.25 });
   const rectCacheRef = useRef<DOMRect | null>(null);
   const mouseRafRef = useRef<number | null>(null);
   const resetRafRef = useRef<number | null>(null);
@@ -205,6 +205,49 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
     resetRafRef.current = requestAnimationFrame(animateReturn);
   }, []);
 
+  // Scroll Reveal Observer & 3D Sphere Parallax
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    // 1. Intersection Observer for fluid scroll reveal on extended cards
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          }
+        });
+      },
+      {
+        root: container,
+        threshold: 0.08,
+        rootMargin: "0px 0px -30px 0px",
+      }
+    );
+
+    const items = container.querySelectorAll(".proxy-scroll-reveal");
+    items.forEach((item) => observer.observe(item));
+
+    // 2. Gentle Parallax on Emerald 3D Sphere
+    const onScroll = () => {
+      if (sphereRef.current) {
+        const scrollY = container.scrollTop;
+        sphereRef.current.style.setProperty(
+          "--sphere-scroll-offset",
+          `${(scrollY * 0.22).toFixed(1)}px`
+        );
+      }
+    };
+
+    container.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      container.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   const activeProfile = profiles.find((p) => p.id === activeProfileId) || profiles[0];
 
   const handleSelectProfile = (id: string) => {
@@ -272,9 +315,9 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
           </div>
         </div>
 
-        {/* Section 2: Extended Content Below the Fold */}
+        {/* Section 2: Extended Content Below the Fold with Scroll Reveal Animations */}
         <div className="proxy-extended-content">
-          <div className="proxy-stagger-ext-1">
+          <div className="proxy-scroll-reveal">
             <ProxyConfiguration
               initialValues={{
                 name: activeProfile.name,
@@ -285,11 +328,11 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
             />
           </div>
 
-          <div className="proxy-stagger-ext-2">
+          <div className="proxy-scroll-reveal">
             <ApplicationRouting />
           </div>
 
-          <div className="proxy-stagger-ext-3">
+          <div className="proxy-scroll-reveal">
             <ConnectionDiagnostics />
           </div>
         </div>
