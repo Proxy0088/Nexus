@@ -1,22 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import "./AmbientParticlesBackground.css";
 
-interface Particle {
-  x: number;
-  y: number;
-  size: number;
-  baseVy: number;
-  vx: number;
-  vy: number;
-  sway: number;
-  swaySpeed: number;
-  phase: number;
-  alpha: number;
-  depth: number;
-  isLargeMote: boolean;
-  colorType: "deep" | "vibrant" | "cyan" | "highlight";
-}
-
 export interface AmbientParticlesBackgroundProps {
   className?: string;
   style?: React.CSSProperties;
@@ -40,77 +24,21 @@ export const AmbientParticlesBackground: React.FC<AmbientParticlesBackgroundProp
     let width = container.clientWidth || window.innerWidth;
     let height = container.clientHeight || window.innerHeight;
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let particles: Particle[] = [];
     let animationFrameId: number | null = null;
-    let lastTime = performance.now();
     let isVisible = true;
 
-    // Pointer disturbance
+    // Mouse pointer interaction
     const pointer = {
       x: -9999,
       y: -9999,
       targetX: -9999,
       targetY: -9999,
-      radius: 140,
+      radius: 240,
     };
 
-    const seeded = (seed: number) => {
-      const x = Math.sin(seed * 9182.345) * 43758.5453;
-      return x - Math.floor(x);
-    };
-
-    const getColor = (type: Particle["colorType"], alpha: number) => {
-      switch (type) {
-        case "deep":
-          return `rgba(0, 117, 103, ${alpha})`;
-        case "vibrant":
-          return `rgba(15, 178, 148, ${alpha})`;
-        case "cyan":
-          return `rgba(73, 212, 183, ${alpha})`;
-        case "highlight":
-          return `rgba(212, 255, 245, ${alpha})`;
-      }
-    };
-
-    const createParticle = (i: number, randomY = true): Particle => {
-      const depth = 0.3 + seeded(i + 1) * 0.7; // 0.3 to 1.0
-      const colorRoll = seeded(i + 7);
-      let colorType: Particle["colorType"] = "vibrant";
-      if (colorRoll < 0.25) colorType = "deep";
-      else if (colorRoll < 0.60) colorType = "vibrant";
-      else if (colorRoll < 0.85) colorType = "cyan";
-      else colorType = "highlight";
-
-      const isLargeMote = seeded(i + 11) > 0.88;
-      const size = isLargeMote ? 12 + depth * 10 : 3.5 + depth * 5.5;
-      const baseVy = -(8 + depth * 14);
-
-      return {
-        x: seeded(i + 2) * (width || 1440),
-        y: randomY ? seeded(i + 3) * (height || 900) : (height || 900) + 20,
-        size,
-        baseVy,
-        vx: 0,
-        vy: baseVy,
-        sway: 10 + seeded(i + 4) * 24,
-        swaySpeed: 0.5 + seeded(i + 5) * 1.1,
-        phase: seeded(i + 6) * Math.PI * 2,
-        alpha: isLargeMote ? 0.22 + depth * 0.25 : 0.40 + depth * 0.50,
-        depth,
-        isLargeMote,
-        colorType,
-      };
-    };
-
-    const initParticles = () => {
-      const currentW = width || 1440;
-      const currentH = height || 900;
-      const targetCount = Math.max(50, Math.min(95, Math.round((currentW * currentH) / 16000)));
-      particles = [];
-      for (let i = 0; i < targetCount; i++) {
-        particles.push(createParticle(i, true));
-      }
-    };
+    // Fine dot grid resolution matching user's reference image
+    const COLS = 82;
+    const ROWS = 48;
 
     const updateCanvasSize = () => {
       const rect = container.getBoundingClientRect();
@@ -121,10 +49,6 @@ export const AmbientParticlesBackground: React.FC<AmbientParticlesBackgroundProp
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      if (particles.length === 0) {
-        initParticles();
-      }
     };
 
     const resizeObserver = new ResizeObserver(() => {
@@ -132,9 +56,8 @@ export const AmbientParticlesBackground: React.FC<AmbientParticlesBackgroundProp
     });
     resizeObserver.observe(container);
     updateCanvasSize();
-    initParticles();
 
-    // Mouse disturbance handlers
+    // Mouse tracking
     const onMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       pointer.targetX = e.clientX - rect.left;
@@ -149,7 +72,7 @@ export const AmbientParticlesBackground: React.FC<AmbientParticlesBackgroundProp
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     document.addEventListener("mouseleave", onMouseLeave);
 
-    // Visibility-aware execution (Stop work when window/tab is hidden)
+    // Visibility-aware tab pausing
     const onVisibilityChange = () => {
       if (document.hidden) {
         isVisible = false;
@@ -159,7 +82,6 @@ export const AmbientParticlesBackground: React.FC<AmbientParticlesBackgroundProp
         }
       } else {
         isVisible = true;
-        lastTime = performance.now();
         if (!animationFrameId) {
           animationFrameId = requestAnimationFrame(loop);
         }
@@ -167,17 +89,14 @@ export const AmbientParticlesBackground: React.FC<AmbientParticlesBackgroundProp
     };
     document.addEventListener("visibilitychange", onVisibilityChange);
 
-    // 120fps Animation Loop
+    // 120fps Dot Matrix Wave Simulation Loop
     const loop = (now: number) => {
       if (!isVisible) return;
 
-      const rawDt = (now - lastTime) / 1000;
-      lastTime = now;
-      const dt = Math.min(rawDt, 0.064);
-
+      // Smooth pointer interpolation
       if (pointer.targetX > -5000) {
-        pointer.x += (pointer.targetX - pointer.x) * 0.18;
-        pointer.y += (pointer.targetY - pointer.y) * 0.18;
+        pointer.x += (pointer.targetX - pointer.x) * 0.15;
+        pointer.y += (pointer.targetY - pointer.y) * 0.15;
       } else {
         pointer.x = -9999;
         pointer.y = -9999;
@@ -185,98 +104,106 @@ export const AmbientParticlesBackground: React.FC<AmbientParticlesBackgroundProp
 
       ctx.clearRect(0, 0, width, height);
 
-      const pCount = particles.length;
+      const time = now * 0.00085;
 
-      // 1. Subtle constellation network threads between near particles
-      for (let i = 0; i < pCount; i++) {
-        const p1 = particles[i];
-        if (p1.isLargeMote) continue;
-        for (let j = i + 1; j < pCount; j++) {
-          const p2 = particles[j];
-          if (p2.isLargeMote) continue;
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
-          const distSq = dx * dx + dy * dy;
-          if (distSq < 7200) { // < ~85px
-            const dist = Math.sqrt(distSq);
-            const lineAlpha = (1 - dist / 85) * 0.18 * Math.min(p1.alpha, p2.alpha);
-            ctx.strokeStyle = `rgba(73, 212, 183, ${lineAlpha.toFixed(3)})`;
-            ctx.lineWidth = 0.8;
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
+      // 3D Grid Parameters with perspective projection
+      const gridW = width * 1.25;
+      const startX = (width - gridW) / 2;
+      const stepX = gridW / (COLS - 1);
+
+      // 3 Color Tiers with refined, elegant dark-mode alpha (zero whiteout/glare)
+      // Tier 0: Deep Teal (#007567)
+      // Tier 1: Vibrant Teal (#0FB294)
+      // Tier 2: Luminous Mint (#49D4B7 / #D4FFF5)
+      const tier0: { x: number; y: number; r: number }[] = [];
+      const tier1: { x: number; y: number; r: number }[] = [];
+      const tier2: { x: number; y: number; r: number }[] = [];
+
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      for (let r = 0; r < ROWS; r++) {
+        const normZ = r / (ROWS - 1); // 0 (near/bottom) to 1 (far/top)
+        const perspective = 0.65 + (1 - normZ) * 0.35;
+        const baseY = height * 0.12 + normZ * height * 0.84;
+
+        for (let c = 0; c < COLS; c++) {
+          const baseX = startX + c * stepX;
+
+          // Gentle, organic undulating wave equations
+          const wave1 = Math.sin(c * 0.12 + time * 1.4) * 20;
+          const wave2 = Math.cos(r * 0.15 + time * 1.0) * 16;
+          const wave3 = Math.sin((c * 0.08 + r * 0.10) + time * 0.8) * 12;
+
+          let waveElevation = wave1 + wave2 + wave3;
+
+          const screenX = centerX + (baseX - centerX) * perspective;
+          let screenY = baseY - waveElevation * perspective;
+
+          // Pointer Disturbance (ripple & push)
+          if (pointer.x > -5000) {
+            const dx = screenX - pointer.x;
+            const dy = screenY - pointer.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < pointer.radius) {
+              const force = (1 - dist / pointer.radius);
+              const ripple = Math.sin(dist * 0.04 - time * 5) * force * 18;
+              screenY += ripple;
+              waveElevation += ripple;
+            }
+          }
+
+          // Content zone attenuation: slightly soften dots in center to keep glass cards ultra-clean
+          const distFromCenter = Math.hypot((screenX - centerX) / (width * 0.55), (screenY - centerY) / (height * 0.55));
+          const centerFactor = Math.min(1, 0.45 + distFromCenter * 0.65);
+
+          const altNorm = Math.max(0, Math.min(1, (waveElevation + 35) / 70)) * centerFactor;
+
+          // Crisp, small micro-dot radius (never oversized)
+          const dotRadius = Math.max(0.7, (0.85 + altNorm * 1.0) * perspective);
+
+          if (altNorm > 0.68) {
+            tier2.push({ x: screenX, y: screenY, r: dotRadius * 1.1 });
+          } else if (altNorm > 0.35) {
+            tier1.push({ x: screenX, y: screenY, r: dotRadius });
+          } else {
+            tier0.push({ x: screenX, y: screenY, r: dotRadius * 0.9 });
           }
         }
       }
 
-      // 2. Render & update individual particles
-      for (let i = 0; i < pCount; i++) {
-        const p = particles[i];
-
-        p.phase += p.swaySpeed * dt;
-        const naturalVx = Math.cos(p.phase) * (p.sway * 0.35);
-
-        // Pointer disturbance push
-        if (pointer.x > -5000) {
-          const dx = p.x - pointer.x;
-          const dy = p.y - pointer.y;
-          const distSq = dx * dx + dy * dy;
-          const radiusSq = pointer.radius * pointer.radius;
-
-          if (distSq < radiusSq && distSq > 0.01) {
-            const dist = Math.sqrt(distSq);
-            const force = (1 - dist / pointer.radius) * 42;
-            p.vx += (dx / dist) * force;
-            p.vy += (dy / dist) * force;
-          }
-        }
-
-        p.vx = p.vx * 0.92 + naturalVx * 0.08;
-        p.vy = p.vy * 0.94 + p.baseVy * 0.06;
-
-        p.x += p.vx * dt * 60;
-        p.y += p.vy * dt * 60;
-
-        // Wrap boundaries
-        if (p.y < -35) {
-          p.y = height + 25;
-          p.x = Math.random() * width;
-        } else if (p.y > height + 40) {
-          p.y = -25;
-        }
-
-        if (p.x < -35) {
-          p.x = width + 25;
-        } else if (p.x > width + 35) {
-          p.x = -25;
-        }
-
-        // Draw particle
-        ctx.save();
+      // Batch Draw Tier 0 (Deep Teal background dots)
+      if (tier0.length > 0) {
+        ctx.fillStyle = "rgba(0, 117, 103, 0.18)";
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-
-        if (p.depth > 0.55 || p.isLargeMote) {
-          ctx.shadowBlur = (p.isLargeMote ? 20 : 12) * p.depth;
-          ctx.shadowColor = "rgba(73, 212, 183, 0.50)";
+        for (let i = 0; i < tier0.length; i++) {
+          const pt = tier0[i];
+          ctx.rect(pt.x - pt.r, pt.y - pt.r, pt.r * 2, pt.r * 2);
         }
-
-        const grad = ctx.createRadialGradient(
-          p.x,
-          p.y,
-          0,
-          p.x,
-          p.y,
-          p.size
-        );
-        grad.addColorStop(0, getColor(p.colorType, p.alpha));
-        grad.addColorStop(0.55, getColor(p.colorType, p.alpha * 0.6));
-        grad.addColorStop(1, getColor(p.colorType, 0));
-
-        ctx.fillStyle = grad;
         ctx.fill();
-        ctx.restore();
+      }
+
+      // Batch Draw Tier 1 (Vibrant Emerald mid-slope dots)
+      if (tier1.length > 0) {
+        ctx.fillStyle = "rgba(15, 178, 148, 0.35)";
+        ctx.beginPath();
+        for (let i = 0; i < tier1.length; i++) {
+          const pt = tier1[i];
+          ctx.rect(pt.x - pt.r, pt.y - pt.r, pt.r * 2, pt.r * 2);
+        }
+        ctx.fill();
+      }
+
+      // Batch Draw Tier 2 (Luminous Mint crest dots — elegant, clean, non-blinding)
+      if (tier2.length > 0) {
+        ctx.fillStyle = "rgba(73, 212, 183, 0.55)";
+        ctx.beginPath();
+        for (let i = 0; i < tier2.length; i++) {
+          const pt = tier2[i];
+          ctx.rect(pt.x - pt.r, pt.y - pt.r, pt.r * 2, pt.r * 2);
+        }
+        ctx.fill();
       }
 
       animationFrameId = requestAnimationFrame(loop);
