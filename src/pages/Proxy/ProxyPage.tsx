@@ -7,6 +7,7 @@ import { ProxyConfiguration } from "@/components/proxy/ProxyConfiguration";
 import { ApplicationRouting } from "@/components/proxy/ApplicationRouting";
 import { ConnectionDiagnostics } from "@/components/proxy/ConnectionDiagnostics";
 import { AddProxyModal } from "@/components/proxy/AddProxyModal";
+import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import "./ProxyPage.css";
 
 const INITIAL_PROFILES: ProxyProfile[] = [
@@ -58,6 +59,7 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
   const sphereRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useSmoothScroll<HTMLDivElement>({ wheelLerp: 0.088 });
   const rectCacheRef = useRef<DOMRect | null>(null);
   const mouseRafRef = useRef<number | null>(null);
   const resetRafRef = useRef<number | null>(null);
@@ -234,8 +236,8 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
       onMouseLeave={handleMouseLeave}
       aria-label="Proxy Manager Dashboard"
     >
-      {/* Isolated Vertical Scroll Container */}
-      <div className="proxy-scroll-container">
+      {/* Isolated Vertical Scroll Container with Smooth 120fps Momentum Physics */}
+      <div ref={scrollContainerRef} className="proxy-scroll-container">
         {/* Decorative Emerald/Teal 3D Sphere — Pure circular geometry, zero square bounds */}
         <div ref={sphereRef} className="proxy-purple-ellipse" aria-hidden="true" />
 

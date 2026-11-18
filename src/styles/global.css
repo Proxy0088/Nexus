@@ -20,6 +20,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
   user-select: none;
+  scroll-behavior: smooth;
 }
 
 button, input, select, textarea {
