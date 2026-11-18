@@ -410,39 +410,67 @@
   }
 }
 
-@keyframes nexusPopoverEnter {
-  from {
+/* Cinematic 3D Lens Focus Entrance */
+@keyframes nexusOpticalLensEnter {
+  0% {
     opacity: 0;
-    transform: scale(0.95) translateY(10px);
+    transform: perspective(1000px) rotateX(4.5deg) scale(0.92) translateY(14px);
+    filter: blur(10px) brightness(1.18);
   }
-  to {
+  60% {
+    filter: blur(0px) brightness(1.03);
+  }
+  100% {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: perspective(1000px) rotateX(0deg) scale(1) translateY(0);
+    filter: blur(0px) brightness(1);
   }
 }
 
-@keyframes nexusPopoverExit {
-  from {
+/* Smooth Defocus Exit */
+@keyframes nexusOpticalLensExit {
+  0% {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: perspective(1000px) rotateX(0deg) scale(1) translateY(0);
+    filter: blur(0px);
   }
-  to {
+  100% {
     opacity: 0;
-    transform: scale(0.96) translateY(6px);
+    transform: perspective(1000px) rotateX(-3deg) scale(0.94) translateY(8px);
+    filter: blur(8px);
+  }
+}
+
+/* Glass Gleam Sweep */
+@keyframes nexusGlassGleam {
+  0% {
+    transform: translateX(-150%) skewX(-15deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(160%) skewX(-15deg);
+    opacity: 0;
   }
 }
 
 .proxy-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.48);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  background: radial-gradient(
+    circle at 50% 40%,
+    rgba(14, 28, 22, 0.42) 0%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: nexusBackdropFadeIn 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: nexusBackdropFadeIn 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: opacity;
 }
 
@@ -473,13 +501,64 @@
   overflow: hidden;
   box-sizing: border-box;
   transform-origin: center center;
-  animation: nexusPopoverEnter 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity;
+  animation: nexusOpticalLensEnter 340ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity, filter;
 }
 
 .proxy-liquid-glass-modal.is-closing {
-  animation: nexusPopoverExit 210ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: nexusOpticalLensExit 210ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
   pointer-events: none;
+}
+
+.proxy-liquid-glass-modal.is-closing * {
+  animation: none !important;
+}
+
+/* Choreographed Internal Element Stagger */
+.proxy-modal-stagger-1 {
+  animation: nexusChildStagger 360ms cubic-bezier(0.16, 1, 0.3, 1) 40ms backwards;
+}
+.proxy-modal-stagger-2 {
+  animation: nexusChildStagger 360ms cubic-bezier(0.16, 1, 0.3, 1) 85ms backwards;
+}
+.proxy-modal-stagger-3 {
+  animation: nexusChildStagger 360ms cubic-bezier(0.16, 1, 0.3, 1) 130ms backwards;
+}
+.proxy-modal-stagger-4 {
+  animation: nexusChildStagger 360ms cubic-bezier(0.16, 1, 0.3, 1) 175ms backwards;
+}
+.proxy-modal-stagger-5 {
+  animation: nexusChildStagger 360ms cubic-bezier(0.16, 1, 0.3, 1) 220ms backwards;
+}
+
+@keyframes nexusChildStagger {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Liquid Glass Gleam Sweep */
+.proxy-modal-gleam {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    118deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0) 35%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(15, 178, 148, 0.18) 53%,
+    rgba(255, 255, 255, 0) 65%,
+    transparent 80%
+  );
+  pointer-events: none;
+  z-index: 2;
+  transform: translateX(-150%);
+  animation: nexusGlassGleam 750ms cubic-bezier(0.19, 1, 0.22, 1) 120ms forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -492,10 +571,22 @@
   .proxy-liquid-glass-modal {
     animation: nexusFadeOnly 200ms ease forwards;
     transform: none !important;
+    filter: none !important;
   }
   .proxy-liquid-glass-modal.is-closing {
     animation: nexusFadeOutOnly 160ms ease forwards;
     transform: none !important;
+    filter: none !important;
+  }
+  .proxy-modal-gleam {
+    display: none !important;
+  }
+  .proxy-modal-stagger-1,
+  .proxy-modal-stagger-2,
+  .proxy-modal-stagger-3,
+  .proxy-modal-stagger-4,
+  .proxy-modal-stagger-5 {
+    animation: none !important;
   }
 }
 

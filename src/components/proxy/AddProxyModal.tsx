@@ -55,8 +55,9 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
         aria-labelledby="modal-title"
       >
         <div className="proxy-modal-specular-top" aria-hidden="true" />
+        <div className="proxy-modal-gleam" aria-hidden="true" />
         <form onSubmit={handleSubmit} className="proxy-modal-inner">
-          <div className="proxy-modal-header">
+          <div className="proxy-modal-header proxy-modal-stagger-1">
             <h2 id="modal-title" className="proxy-modal-title">
               Add New Proxy
             </h2>
@@ -71,7 +72,7 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
           </div>
 
           <div className="proxy-form-grid" style={{ gridTemplateColumns: "1fr" }}>
-            <div className="proxy-form-group">
+            <div className="proxy-form-group proxy-modal-stagger-2">
               <label className="proxy-form-label" htmlFor="modal-proxy-name">
                 Profile Name
               </label>
@@ -87,7 +88,7 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
               />
             </div>
 
-            <div className="proxy-form-group">
+            <div className="proxy-form-group proxy-modal-stagger-3">
               <span className="proxy-form-label">Protocol</span>
               <div className="proxy-protocol-segmented">
                 {(["SOCKS5", "HTTPS", "HTTP"] as const).map((proto) => (
@@ -103,7 +104,7 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
               </div>
             </div>
 
-            <div className="proxy-form-group">
+            <div className="proxy-form-group proxy-modal-stagger-4">
               <label className="proxy-form-label" htmlFor="modal-proxy-host">
                 Server Host / IP
               </label>
@@ -118,7 +119,7 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
               />
             </div>
 
-            <div className="proxy-form-group">
+            <div className="proxy-form-group proxy-modal-stagger-4">
               <label className="proxy-form-label" htmlFor="modal-proxy-port">
                 Port
               </label>
@@ -135,7 +136,7 @@ export const AddProxyModal: React.FC<AddProxyModalProps> = ({ onClose, onSave })
             </div>
           </div>
 
-          <div className="proxy-modal-actions">
+          <div className="proxy-modal-actions proxy-modal-stagger-5">
             <button
               type="button"
               className="proxy-modal-btn-secondary"
