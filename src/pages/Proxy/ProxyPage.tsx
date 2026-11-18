@@ -101,8 +101,11 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
         // Subtle, small organic mouse parallax (±12px X, ±8px Y) — GPU transform only, zero card reflow
         const offsetX = (normX * 12).toFixed(1);
         const offsetY = (normY * 8).toFixed(1);
+        const lightX = (31.8 + normX * 6).toFixed(1);
+        const lightY = (27.3 + normY * 5).toFixed(1);
 
         sphereRef.current.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) rotate(60.73deg)`;
+        sphereRef.current.style.setProperty("--sphere-light-pos", `${lightX}% ${lightY}%`);
       });
     },
     [isExiting]
@@ -115,6 +118,7 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
     }
     if (sphereRef.current) {
       sphereRef.current.style.transform = "translate3d(0px, 0px, 0) rotate(60.73deg)";
+      sphereRef.current.style.setProperty("--sphere-light-pos", "31.8% 27.3%");
     }
   }, []);
 

@@ -86,6 +86,8 @@ export const ConnectionDiagnostics: React.FC = () => {
             <ProxyGlassCard
               key={item.id}
               cornerRadius={28}
+              tilt={true}
+              maxTilt={5}
               className="proxy-diagnostic-card"
               style={{ "--card-index": index } as React.CSSProperties}
             >

@@ -16,6 +16,8 @@ export const Socks5Card: React.FC<Socks5CardProps> = ({
   return (
     <ProxyGlassCard
       cornerRadius={41}
+      tilt={true}
+      maxTilt={4}
       className={`proxy-status-card ${className}`.trim()}
       aria-label="Active Protocol and Latency"
     >

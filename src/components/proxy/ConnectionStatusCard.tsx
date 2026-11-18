@@ -16,6 +16,8 @@ export const ConnectionStatusCard: React.FC<ConnectionStatusCardProps> = ({
   return (
     <ProxyGlassCard
       cornerRadius={41}
+      tilt={true}
+      maxTilt={4}
       className={`proxy-status-card ${className}`.trim()}
       aria-label="Connection Status Overview"
     >

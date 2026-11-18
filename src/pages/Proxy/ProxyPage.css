@@ -115,7 +115,7 @@
   border-radius: 50%;
   background-color: #007567;
   background-image: radial-gradient(
-    75.8% 75.8% at 31.8% 27.3%,
+    75.8% 75.8% at var(--sphere-light-pos, 31.8% 27.3%),
     #D4FFF5 0%,
     #A3EEDC 18%,
     #49D4B7 43%,
