@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { ProxyGlassCard } from "./ProxyGlassCard";
 import {
   SearchIcon,
@@ -240,6 +240,7 @@ interface RouteSelectorProps {
   onSelectProfile: (id: string) => void;
   appName: string;
   isOpen: boolean;
+  isDropup?: boolean;
   onToggle: () => void;
   onClose: () => void;
 }
@@ -249,26 +250,44 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
   onSelectProfile,
   appName,
   isOpen,
+  isDropup = false,
   onToggle,
   onClose,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isClosing, setIsClosing] = useState(false);
+  const closeTimerRef = useRef<number | null>(null);
 
   const activeProfile =
     AVAILABLE_PROFILES.find((p) => p.id === currentProfileId) ||
     AVAILABLE_PROFILES[0];
 
+  const handleGracefulClose = useCallback(() => {
+    if (isClosing) return;
+    setIsClosing(true);
+    closeTimerRef.current = window.setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 140);
+  }, [isClosing, onClose]);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
+  }, []);
+
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        onClose();
+        handleGracefulClose();
       }
     };
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") handleGracefulClose();
     };
 
-    if (isOpen) {
+    if (isOpen && !isClosing) {
       document.addEventListener("mousedown", handleOutsideClick);
       document.addEventListener("keydown", handleEsc);
     }
@@ -276,7 +295,16 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
       document.removeEventListener("mousedown", handleOutsideClick);
       document.removeEventListener("keydown", handleEsc);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, isClosing, handleGracefulClose]);
+
+  const handleToggleClick = () => {
+    if (isOpen) {
+      handleGracefulClose();
+    } else {
+      setIsClosing(false);
+      onToggle();
+    }
+  };
 
   const getLatencyColor = (ms: number) => {
     if (ms < 50) return "#10B981"; // Emerald
@@ -284,12 +312,17 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
     return "#EF4444"; // Red
   };
 
+  const shouldRenderMenu = isOpen || isClosing;
+
   return (
-    <div className={`proxy-route-selector-container ${isOpen ? "is-active-container" : ""}`} ref={containerRef}>
+    <div
+      className={`proxy-route-selector-container ${shouldRenderMenu ? "is-active-container" : ""}`}
+      ref={containerRef}
+    >
       <button
         type="button"
         className={`proxy-route-pill-btn ${isOpen ? "is-open" : ""}`}
-        onClick={onToggle}
+        onClick={handleToggleClick}
         aria-expanded={isOpen}
         aria-label={`Route proxy for ${appName}, currently ${activeProfile.name}`}
       >
@@ -305,8 +338,11 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
         </span>
       </button>
 
-      {isOpen && (
-        <div className="proxy-route-dropdown-menu" role="menu">
+      {shouldRenderMenu && (
+        <div
+          className={`proxy-route-dropdown-menu ${isDropup ? "is-dropup" : ""} ${isClosing ? "is-closing" : ""}`}
+          role="menu"
+        >
           <div className="proxy-route-specular-top" aria-hidden="true" />
           <div className="proxy-route-menu-header">Select Proxy Endpoint</div>
           {AVAILABLE_PROFILES.map((profile) => {
@@ -319,7 +355,7 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
                 className={`proxy-route-menu-item ${isSelected ? "is-selected" : ""}`}
                 onClick={() => {
                   onSelectProfile(profile.id);
-                  onClose();
+                  handleGracefulClose();
                 }}
               >
                 <div className="proxy-route-item-left">
@@ -356,8 +392,23 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
   const [filterMode, setFilterMode] = useState<"all" | "routed" | "direct">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isAddModalClosing, setIsAddModalClosing] = useState(false);
   const [customAppName, setCustomAppName] = useState("");
   const [openDropdownAppId, setOpenDropdownAppId] = useState<string | null>(null);
+
+  const handleOpenAddModal = () => {
+    setIsAddModalClosing(false);
+    setIsAddModalOpen(true);
+  };
+
+  const handleCloseAddModal = () => {
+    if (isAddModalClosing) return;
+    setIsAddModalClosing(true);
+    setTimeout(() => {
+      setIsAddModalClosing(false);
+      setIsAddModalOpen(false);
+    }, 210);
+  };
 
   const handleProfileChange = (appId: string, profileId: string) => {
     setRules((prev) =>
@@ -396,7 +447,7 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
 
   const handleAddPresetApp = (preset: { appId: string; appName: string; category: string }) => {
     if (rules.some((r) => r.appId === preset.appId)) {
-      setIsAddModalOpen(false);
+      handleCloseAddModal();
       return;
     }
     const newRule: AppRoutingRule = {
@@ -408,7 +459,7 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
       isCustom: true,
     };
     setRules((prev) => [...prev, newRule]);
-    setIsAddModalOpen(false);
+    handleCloseAddModal();
   };
 
   const handleAddCustomApp = (e: React.FormEvent) => {
@@ -425,7 +476,7 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
     };
     setRules((prev) => [...prev, newRule]);
     setCustomAppName("");
-    setIsAddModalOpen(false);
+    handleCloseAddModal();
   };
 
   const handleDeleteRule = (appId: string) => {
@@ -469,7 +520,7 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
           <button
             type="button"
             className="proxy-routing-add-btn"
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={handleOpenAddModal}
           >
             <PlusIcon size={16} />
             <span>Add App</span>
@@ -581,6 +632,7 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
                         }}
                         appName={rule.appName}
                         isOpen={isDropdownOpen}
+                        isDropup={index >= 2}
                         onToggle={() =>
                           setOpenDropdownAppId(isDropdownOpen ? null : rule.appId)
                         }
@@ -616,13 +668,13 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
       </div>
 
       {/* Add App Modal */}
-      {isAddModalOpen && (
+      {(isAddModalOpen || isAddModalClosing) && (
         <div
-          className="proxy-modal-backdrop"
-          onClick={() => setIsAddModalOpen(false)}
+          className={`proxy-modal-backdrop ${isAddModalClosing ? "is-closing" : ""}`}
+          onClick={handleCloseAddModal}
         >
           <div
-            className="proxy-modal-box proxy-liquid-glass-modal proxy-add-app-dialog"
+            className={`proxy-modal-box proxy-liquid-glass-modal proxy-add-app-dialog ${isAddModalClosing ? "is-closing" : ""}`}
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -642,7 +694,7 @@ export const ApplicationRouting: React.FC<ApplicationRoutingProps> = ({ classNam
                 <button
                   type="button"
                   className="proxy-modal-close-btn"
-                  onClick={() => setIsAddModalOpen(false)}
+                  onClick={handleCloseAddModal}
                   aria-label="Close"
                 >
                   <CloseIcon size={18} />
