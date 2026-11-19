@@ -601,12 +601,8 @@
   height: 36px;
   padding: 0 14px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-top: 1.5px solid rgba(255, 255, 255, 0.60);
-  box-shadow:
-    inset 0 1.2px 2px 0 rgba(255, 255, 255, 0.45),
-    inset 0 -1px 1.5px 0 rgba(255, 255, 255, 0.08),
-    0 4px 14px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(24px) saturate(160%);
   -webkit-backdrop-filter: blur(24px) saturate(160%);
   border-radius: 12px;
@@ -621,21 +617,15 @@
 }
 
 .proxy-route-pill-btn:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.28);
-  border-top-color: rgba(255, 255, 255, 0.80);
-  box-shadow:
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.5),
-    0 4px 14px rgba(0, 0, 0, 0.40);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
 }
 
 .proxy-route-pill-btn.is-open {
-  background: rgba(255, 255, 255, 0.10);
-  border-color: rgba(255, 255, 255, 0.32);
-  border-top-color: rgba(255, 255, 255, 0.90);
-  box-shadow:
-    inset 0 1.5px 2.5px 0 rgba(255, 255, 255, 0.55),
-    0 4px 16px rgba(0, 0, 0, 0.45);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.20);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.40);
   color: #FFFFFF;
 }
 
@@ -722,32 +712,37 @@
   }
 }
 
-/* Floating Glass Dropdown Menu (Clean Crystal Glass with Bevel & Specular Highlight, No Neon Halos) */
+/* Floating Glass Dropdown Menu — Clean Opaque Solid Dark, No Halos, Full Content Visibility */
 .proxy-route-dropdown-menu {
   position: fixed;
   width: 290px;
-  border-radius: 20px;
-  background: #0f1815;
-  background: linear-gradient(
-    145deg,
-    rgba(22, 32, 28, 0.985) 0%,
-    rgba(13, 20, 17, 0.995) 100%
-  );
-  backdrop-filter: blur(40px) saturate(190%) brightness(105%);
-  -webkit-backdrop-filter: blur(40px) saturate(190%) brightness(105%);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-top: 1.5px solid rgba(255, 255, 255, 0.70);
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 16px;
+  background: #0d1512;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
-    inset 0 1.5px 3px 0 rgba(255, 255, 255, 0.60),
-    inset 0 -1.5px 2px 0 rgba(255, 255, 255, 0.10),
-    0 24px 50px -8px rgba(0, 0, 0, 0.90),
-    0 0 0 1px rgba(0, 0, 0, 0.60);
-  padding: 8px;
+    0 18px 40px -4px rgba(0, 0, 0, 0.88),
+    0 0 0 1px rgba(0, 0, 0, 0.50);
+  padding: 6px;
   z-index: 99990;
-  overflow: hidden;
   box-sizing: border-box;
   transform-origin: top right;
   animation: nexusDropdownEnterDown 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.proxy-route-dropdown-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.proxy-route-dropdown-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.proxy-route-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
 }
 
 .proxy-route-dropdown-menu.is-dropup {
@@ -766,19 +761,7 @@
 }
 
 .proxy-route-specular-top {
-  position: absolute;
-  top: 0;
-  left: 20px;
-  right: 20px;
-  height: 1.5px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.75) 50%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 10;
+  display: none;
 }
 
 .proxy-route-menu-header {
@@ -797,20 +780,20 @@
   justify-content: space-between;
   padding: 8px 10px;
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
   border-radius: 10px;
   cursor: pointer;
   text-align: left;
-  transition: background 120ms ease, border-color 120ms ease;
+  transition: background 120ms ease;
 }
 
 .proxy-route-menu-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .proxy-route-menu-item.is-selected {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
 }
 
 .proxy-route-item-left {

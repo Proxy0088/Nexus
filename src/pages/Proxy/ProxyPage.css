@@ -19,12 +19,12 @@
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
-  scroll-behavior: auto !important; /* Allow JS RAF loop to drive smooth momentum curves at 120fps without browser collision */
+  scroll-behavior: smooth;
   overscroll-behavior-y: contain;
   z-index: 2;
 }
 
-/* Custom subtle scrollbar with smooth activity transitions */
+/* Custom subtle scrollbar */
 .proxy-scroll-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -34,20 +34,13 @@
 }
 
 .proxy-scroll-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.18);
   border-radius: 4px;
-  transition: background 220ms ease, opacity 220ms ease;
-}
-
-.proxy-scroll-container.is-smooth-scrolling::-webkit-scrollbar-thumb,
-.proxy-scroll-container:hover::-webkit-scrollbar-thumb {
-  background: rgba(52, 211, 153, 0.42);
-  box-shadow: 0 0 8px rgba(52, 211, 153, 0.25);
+  transition: background 140ms ease;
 }
 
 .proxy-scroll-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(52, 211, 153, 0.70);
-  box-shadow: 0 0 12px rgba(52, 211, 153, 0.40);
+  background: rgba(255, 255, 255, 0.32);
 }
 
 /* Staggered Entrance Keyframes — Pure GPU Compositor (translate3d + opacity) */
@@ -118,7 +111,7 @@
   width: 240px;
   height: 240px;
   left: -20px;
-  top: calc(192px + var(--sphere-scroll-offset, 0px));
+  top: 192px;
   border-radius: 50%;
   background-color: #007567;
   background-image: radial-gradient(
@@ -217,16 +210,18 @@
   gap: 8px;
 }
 
-/* Scroll-Triggered Fluid Card Reveal (Apple VisionOS Spring Float-In) */
-.proxy-scroll-reveal {
-  opacity: 0;
-  transform: translate3d(0, 36px, 0) scale(0.982);
-  transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 580ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+/* Staggered Extended Content */
+.proxy-stagger-ext-1 {
+  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 290ms;
 }
 
-.proxy-scroll-reveal.is-visible {
-  opacity: 1;
-  transform: translate3d(0, 0, 0) scale(1);
+.proxy-stagger-ext-2 {
+  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 350ms;
+}
+
+.proxy-stagger-ext-3 {
+  animation: nexusCascadeEntrance 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 410ms;
 }

@@ -267,13 +267,30 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
     if (!btnRef.current) return;
     const rect = btnRef.current.getBoundingClientRect();
     const menuWidth = 290;
-    const menuHeight = 245;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
+    const menuHeight = 255;
+    const margin = 12;
 
-    const isDropup = spaceBelow < menuHeight + 16 && spaceAbove > spaceBelow;
-    const top = isDropup ? Math.max(12, rect.top - menuHeight - 8) : rect.bottom + 8;
-    const left = Math.max(12, Math.min(window.innerWidth - menuWidth - 12, rect.right - menuWidth));
+    const spaceBelow = window.innerHeight - rect.bottom - margin;
+    const spaceAbove = rect.top - margin;
+
+    let isDropup = false;
+    let top: number;
+
+    if (spaceBelow >= menuHeight) {
+      top = rect.bottom + 6;
+      isDropup = false;
+    } else if (spaceAbove >= menuHeight) {
+      top = rect.top - menuHeight - 6;
+      isDropup = true;
+    } else if (spaceAbove > spaceBelow) {
+      top = Math.max(margin, rect.top - menuHeight - 6);
+      isDropup = true;
+    } else {
+      top = Math.max(margin, window.innerHeight - menuHeight - margin);
+      isDropup = false;
+    }
+
+    const left = Math.max(margin, Math.min(window.innerWidth - menuWidth - margin, rect.right - menuWidth));
 
     setCoords({ top, left, isDropup });
   }, []);
@@ -381,7 +398,6 @@ const RouteSelector: React.FC<RouteSelectorProps> = ({
             left: `${coords.left}px`,
           }}
         >
-          <div className="proxy-route-specular-top" aria-hidden="true" />
           <div className="proxy-route-menu-header">Select Proxy Endpoint</div>
           {AVAILABLE_PROFILES.map((profile) => {
             const isSelected = profile.id === activeProfile.id;
