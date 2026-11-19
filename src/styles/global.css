@@ -4,6 +4,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: var(--nexus-font-family) !important;
 }
 
 html, body {
@@ -13,7 +14,7 @@ html, body {
   padding: 0;
   background-color: var(--nexus-color-bg-root);
   color: var(--nexus-color-text-secondary);
-  font-family: var(--nexus-font-family);
+  font-family: var(--nexus-font-family) !important;
   font-optical-sizing: auto;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -24,7 +25,7 @@ html, body {
 }
 
 button, input, select, textarea {
-  font-family: inherit;
+  font-family: var(--nexus-font-family) !important;
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

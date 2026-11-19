@@ -50,8 +50,8 @@
   --nexus-radius-profile: 58px;
   --nexus-radius-search: 60px;
 
-  /* Typography Scale — Apple Optical Sizing & Dynamic Tracking (§15) */
-  --nexus-font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Segoe UI", Roboto, "Inter", sans-serif;
+  /* Typography Scale — Comic Sans MS Typography */
+  --nexus-font-family: "Comic Sans MS", "Comic Sans", "Comic Neue", cursive, sans-serif;
   --nexus-font-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
 
   /* Optical Tracking Tokens */
