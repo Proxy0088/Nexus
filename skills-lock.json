@@ -50,6 +50,13 @@
       "skillPath": ".claude/skills/lightweight-3d-effects/SKILL.md",
       "computedHash": "055ee1819fdea067337076c54bd378c38ab48c7c43f4bc9a78aa6c479b6cebb6"
     },
+    "loading-states": {
+      "source": "Owl-Listener/designer-skills",
+      "commit": "9a6930cf84a822eb458624bd11c61aac5bbdf224",
+      "sourceType": "github",
+      "skillPath": "interaction-design/skills/loading-states/SKILL.md",
+      "computedHash": "84670507ec9ceebb3411a57e202a939073d29b7035ef2b8f63a23982c2256a64"
+    },
     "ponytail": {
       "source": "DietrichGebert/ponytail",
       "commit": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846",
