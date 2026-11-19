@@ -5,7 +5,45 @@ import { LiquidGlassPanel } from "@/components/glass/LiquidGlassPanel";
 import { LiquidGlassScene } from "@/components/glass/LiquidGlassScene";
 import { ProxyPage } from "@/pages/Proxy";
 import { AmbientParticlesBackground } from "@/components/background/AmbientParticlesBackground";
+import { ModuleSkeletonView } from "@/components/common/ModuleSkeletonView";
 import "./HomePage.css";
+
+const PlaceholderModuleWithSkeleton: React.FC<{
+  displayTab: string;
+  isExiting: boolean;
+}> = ({ displayTab, isExiting }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, [displayTab]);
+
+  if (isLoading) {
+    return (
+      <div className={`nexus-skeleton-fade-enter ${isExiting ? "nexus-tab-content-exit" : ""}`}>
+        <ModuleSkeletonView moduleName={displayTab} />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      key={displayTab}
+      className={`nexus-module-placeholder ${isExiting ? "nexus-tab-content-exit" : "nexus-skeleton-fade-enter"}`}
+    >
+      <h2 className="nexus-module-placeholder-title">
+        {displayTab.charAt(0).toUpperCase() + displayTab.slice(1)} Module
+      </h2>
+      <p className="nexus-module-placeholder-desc">
+        This internal module route is prepared. Implementation scheduled for next phase.
+      </p>
+    </div>
+  );
+};
 
 export const HomePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<NavTabId>("home");
@@ -105,17 +143,7 @@ export const HomePage: React.FC = () => {
             )}
 
             {displayTab !== "home" && displayTab !== "proxy" && (
-              <div
-                key={displayTab}
-                className={`nexus-module-placeholder ${isExiting ? "nexus-tab-content-exit" : "nexus-tab-content-enter"}`}
-              >
-                <h2 className="nexus-module-placeholder-title">
-                  {displayTab.charAt(0).toUpperCase() + displayTab.slice(1)} Module
-                </h2>
-                <p className="nexus-module-placeholder-desc">
-                  This internal module route is prepared. Implementation scheduled for next phase.
-                </p>
-              </div>
+              <PlaceholderModuleWithSkeleton displayTab={displayTab} isExiting={isExiting} />
             )}
           </LiquidGlassPanel>
         </div>

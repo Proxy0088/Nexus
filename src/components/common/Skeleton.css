@@ -1,0 +1,101 @@
+/* Reusable Apple Liquid Glass Skeleton & Shimmer Styles (from loading-states skill) */
+
+.nexus-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-sizing: border-box;
+}
+
+/* Subtle, elegant liquid glass shimmer wave sweep */
+.nexus-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.11) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    transparent 100%
+  );
+  animation: nexusSkeletonShimmer 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+/* Stagger shimmer waves so rows don't flash in lockstep */
+.nexus-skeleton.stagger-1::after {
+  animation-delay: 80ms;
+}
+.nexus-skeleton.stagger-2::after {
+  animation-delay: 160ms;
+}
+.nexus-skeleton.stagger-3::after {
+  animation-delay: 240ms;
+}
+.nexus-skeleton.stagger-4::after {
+  animation-delay: 320ms;
+}
+
+@keyframes nexusSkeletonShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Reduced motion accessibility fallback */
+@media (prefers-reduced-motion: reduce) {
+  .nexus-skeleton::after {
+    animation: none;
+    display: none;
+  }
+  .nexus-skeleton {
+    background: rgba(255, 255, 255, 0.065);
+    animation: nexusSkeletonGentlePulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes nexusSkeletonGentlePulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+/* Content cross-fade transitions */
+.nexus-skeleton-fade-enter {
+  animation: nexusSkeletonFadeIn 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.nexus-skeleton-fade-exit {
+  animation: nexusSkeletonFadeOut 200ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes nexusSkeletonFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes nexusSkeletonFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

@@ -7,6 +7,7 @@ import { ProxyConfiguration } from "@/components/proxy/ProxyConfiguration";
 import { ApplicationRouting } from "@/components/proxy/ApplicationRouting";
 import { ConnectionDiagnostics } from "@/components/proxy/ConnectionDiagnostics";
 import { AddProxyModal } from "@/components/proxy/AddProxyModal";
+import { ProxyPageSkeleton } from "@/components/proxy/ProxyPageSkeleton";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import "./ProxyPage.css";
 
@@ -57,6 +58,7 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
   const [profiles, setProfiles] = useState<ProxyProfile[]>(INITIAL_PROFILES);
   const [activeProfileId, setActiveProfileId] = useState("de-main");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const pageRef = useRef<HTMLDivElement>(null);
   const sphereRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useSmoothScroll<HTMLDivElement>({ wheelLerp: 0.095, multiplier: 1.25 });
@@ -70,6 +72,21 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
     lightX: 31.8,
     lightY: 27.3,
   });
+
+  // loading-states skill: 650ms initial load simulation (ideal 100ms - 1s window)
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setIsLoading(false);
+    }, 650);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleRefreshData = useCallback(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 650);
+  }, []);
 
   useEffect(() => {
     const invalidateRect = () => {
@@ -284,58 +301,71 @@ export const ProxyPage: React.FC<ProxyPageProps> = ({ isExiting = false }) => {
         {/* Decorative Emerald/Teal 3D Sphere — Pure circular geometry, zero square bounds */}
         <div ref={sphereRef} className="proxy-purple-ellipse" aria-hidden="true" />
 
-        {/* Section 1: Initial Viewport Frame */}
-        <div className="proxy-initial-viewport">
-          {/* Header */}
-          <div className="proxy-stagger-header">
-            <ProxyHeader statusText="Connected" isConnected={true} />
+        {isLoading ? (
+          <div className="nexus-skeleton-fade-enter" style={{ padding: "0 20px" }}>
+            <ProxyPageSkeleton />
           </div>
+        ) : (
+          <div className="nexus-skeleton-fade-enter">
+            {/* Section 1: Initial Viewport Frame */}
+            <div className="proxy-initial-viewport">
+              {/* Header */}
+              <div className="proxy-stagger-header">
+                <ProxyHeader
+                  statusText="Connected"
+                  isConnected={true}
+                  onRefresh={handleRefreshData}
+                  isRefreshing={isLoading}
+                />
+              </div>
 
-          {/* Top 2 Cards: Connection Status Card & SOCKS5 Card */}
-          <div className="proxy-top-cards-row">
-            <div className="proxy-stagger-card-1">
-              <ConnectionStatusCard status="Stable" lastTest="Just Now" />
+              {/* Top 2 Cards: Connection Status Card & SOCKS5 Card */}
+              <div className="proxy-top-cards-row">
+                <div className="proxy-stagger-card-1">
+                  <ConnectionStatusCard status="Stable" lastTest="Just Now" />
+                </div>
+                <div className="proxy-stagger-card-2">
+                  <Socks5Card
+                    protocol={activeProfile.protocol === "SOCKS5" ? "Socks5" : activeProfile.protocol}
+                    latencyMs={activeProfile.latencyMs}
+                  />
+                </div>
+              </div>
+
+              {/* Proxy Profiles Panel (Initial peek starting at Top: 402px) */}
+              <div className="proxy-profiles-wrapper proxy-stagger-profiles">
+                <ProxyProfilesPanel
+                  profiles={profiles}
+                  activeProfileId={activeProfileId}
+                  onSelectProfile={handleSelectProfile}
+                  onAddProxy={() => setIsAddModalOpen(true)}
+                />
+              </div>
             </div>
-            <div className="proxy-stagger-card-2">
-              <Socks5Card
-                protocol={activeProfile.protocol === "SOCKS5" ? "Socks5" : activeProfile.protocol}
-                latencyMs={activeProfile.latencyMs}
-              />
+
+            {/* Section 2: Extended Content Below the Fold with Scroll Reveal Animations */}
+            <div className="proxy-extended-content">
+              <div className="proxy-scroll-reveal">
+                <ProxyConfiguration
+                  initialValues={{
+                    name: activeProfile.name,
+                    protocol: activeProfile.protocol,
+                    host: activeProfile.host,
+                    port: activeProfile.port,
+                  }}
+                />
+              </div>
+
+              <div className="proxy-scroll-reveal">
+                <ApplicationRouting />
+              </div>
+
+              <div className="proxy-scroll-reveal">
+                <ConnectionDiagnostics />
+              </div>
             </div>
           </div>
-
-          {/* Proxy Profiles Panel (Initial peek starting at Top: 402px) */}
-          <div className="proxy-profiles-wrapper proxy-stagger-profiles">
-            <ProxyProfilesPanel
-              profiles={profiles}
-              activeProfileId={activeProfileId}
-              onSelectProfile={handleSelectProfile}
-              onAddProxy={() => setIsAddModalOpen(true)}
-            />
-          </div>
-        </div>
-
-        {/* Section 2: Extended Content Below the Fold with Scroll Reveal Animations */}
-        <div className="proxy-extended-content">
-          <div className="proxy-scroll-reveal">
-            <ProxyConfiguration
-              initialValues={{
-                name: activeProfile.name,
-                protocol: activeProfile.protocol,
-                host: activeProfile.host,
-                port: activeProfile.port,
-              }}
-            />
-          </div>
-
-          <div className="proxy-scroll-reveal">
-            <ApplicationRouting />
-          </div>
-
-          <div className="proxy-scroll-reveal">
-            <ConnectionDiagnostics />
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Add Proxy Modal */}
